@@ -16,7 +16,11 @@ class ApiAccessToken
     public function handle(Request $request, Closure $next): Response
     {
         if ($request->bearerToken() !== config('api.token')) {
-            abort(403);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized',
+                'code' => Response::HTTP_UNAUTHORIZED,
+            ], Response::HTTP_UNAUTHORIZED);
         }
 
         return $next($request);

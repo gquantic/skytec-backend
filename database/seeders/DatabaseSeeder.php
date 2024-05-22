@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\News\News;
+use App\Models\News\NewsCategory;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -15,9 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        User::factory()->count(100)->create();
+
+        NewsCategory::factory()->count(100)->create();
+
+        News::factory()->count(100)->create();
     }
 }
