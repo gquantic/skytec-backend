@@ -13,7 +13,7 @@ class AuthController extends Controller
 {
     public function login(UserLoginRequest $request)
     {
-        if ($user = User::query()->where('email', $request->email)->first()) {
+        if ($user = User::query()->where('login', $request->login)->first()) {
             if (Hash::check($request->password, $user->password)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
                 return ApiService::jsonResponse([
@@ -32,7 +32,7 @@ class AuthController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required',
-            'email' => 'required|email|unique:users',
+            'login' => 'required|unique:users',
             'password' => 'required|min:6',
         ]);
 

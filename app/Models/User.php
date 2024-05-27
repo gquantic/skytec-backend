@@ -69,4 +69,9 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    public function manager(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(User::class, 'manager_id');
+    }
 }

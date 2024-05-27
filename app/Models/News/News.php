@@ -2,13 +2,14 @@
 
 namespace App\Models\News;
 
+use App\Helpers\Traits\ModelTrait;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
-    use HasFactory;
+    use HasFactory, ModelTrait;
 
     protected $table = 'news';
 

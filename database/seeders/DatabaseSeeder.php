@@ -22,5 +22,10 @@ class DatabaseSeeder extends Seeder
         NewsCategory::factory()->count(100)->create();
 
         News::factory()->count(100)->create();
+
+        foreach (User::query()->offset(5)->limit(1000)->get() as $user) {
+            $user->manager_id = rand(1,5);
+            $user->save();
+        }
     }
 }
