@@ -19,4 +19,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::middleware(\App\Http\Middleware\ApiAccessToken::class)->group(function () {
     Route::resource('news', 'App\Http\Controllers\Api\Content\NewsController');
+    Route::get('emoji', 'App\Http\Controllers\Api\Content\EmojiController@index');
+
+    Route::resource('news/comments', 'App\Http\Controllers\Api\Content\NewsCommentController');
 });

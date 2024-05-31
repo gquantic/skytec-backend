@@ -15,13 +15,19 @@ return new class extends Migration
             $table->id();
             $table->foreignId('manager_id')->nullable()->constrained('users');
             $table->string('department_id')->nullable();
+            $table->string('position')->default('Не указана');
             $table->string('avatar')->default('https://d11a6trkgmumsb.cloudfront.net/original/3X/d/8/d8b5d0a738295345ebd8934b859fa1fca1c8c6ad.jpeg');
-            $table->string('name');
+            $table->string('firstname')->nullable();
+            $table->string('lastname')->nullable();
+            $table->string('surname')->nullable();
             $table->string('login')->unique();
             $table->string('email')->unique();
             $table->string('phone')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            $table->boolean('hide_phone')->default(false);
+
             $table->rememberToken();
             $table->timestamps();
         });

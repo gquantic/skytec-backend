@@ -70,6 +70,18 @@ class User extends Authenticatable
         'created_at',
     ];
 
+    protected $appends = ['name'];
+
+    /**
+     * Get the user's full name.
+     *
+     * @return string
+     */
+    public function getNameAttribute(): string
+    {
+        return "{$this->lastname} {$this->firstname} {$this->surname}";
+    }
+
     public function manager(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'manager_id');

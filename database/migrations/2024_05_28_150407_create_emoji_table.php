@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::create('emoji', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->longText('description')->nullable();
+            $table->string('slug')->nullable()->unique();
+            $table->string('image', 255);
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('emoji');
     }
 };

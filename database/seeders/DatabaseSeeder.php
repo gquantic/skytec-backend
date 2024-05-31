@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Department;
 use App\Models\News\News;
 use App\Models\News\NewsCategory;
 use App\Models\User;
@@ -16,6 +17,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // User::factory(10)->create();
+
+        Department::factory()->count(10)->create();
 
         User::factory()->count(100)->create();
 

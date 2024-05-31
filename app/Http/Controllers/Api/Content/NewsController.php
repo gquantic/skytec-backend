@@ -24,7 +24,7 @@ class NewsController extends Controller
         return $this->newsRepository->all()->with(['category' => function ($query) {
             $query->select('id', 'slug', 'title');
         }, 'user' => function ($query) {
-            $query->select('id', 'avatar', 'name');
+            $query->select('id', 'avatar', 'firstname', 'lastname', 'surname');
         }])->get();
     }
 
@@ -39,9 +39,15 @@ class NewsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
-        //
+        return News::query()
+            ->orderByDesc('created_at')
+            ->with(['category', 'user', 'comments' => function ($query) {
+                $query->orderByDesc('created_at');
+            }, 'comments.user'])
+            ->where('slug', $slug)
+            ->first();
     }
 
     /**

@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->foreignId('news_category_id');
-            $table->string('title');
             $table->string('slug')->unique();
+            $table->string('title');
             $table->text('content')->nullable();
             $table->string('image')->nullable();
             $table->string('video')->nullable();

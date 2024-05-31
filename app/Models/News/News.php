@@ -23,6 +23,11 @@ class News extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function comments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(NewsComment::class);
+    }
+
     public function scopeActive($query)
     {
         return $query->where('active', 1)

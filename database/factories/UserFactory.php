@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Department;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -24,12 +25,17 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $name = explode(' ', fake()->name());
+
         return [
-            'avatar' => 'https://i.pravatar.cc/150?img=' . rand(1, 60),
+            'avatar' => 'https://i.pravatar.cc/150?img=' . rand(1, 40),
             'manager_id' => User::query()->inRandomOrder()->first()->id ?? null,
+            'department_id' => Department::query()->inRandomOrder()->first()->id ?? null,
             'phone' => $this->faker->phoneNumber(),
-            'login' => Str::slug(fake()->name . '_' . Str::random(5), separator: '_'),
-            'name' => fake()->name(),
+            'login' => Str::slug(implode('_', $name) . '_' . Str::random(5), separator: '_'),
+            'firstname' => $name[0],
+            'lastname' => $name[1],
+            'surname' => $name[2],
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
