@@ -2,7 +2,7 @@
 
 namespace App\Models\News;
 
-use App\Helpers\Traits\ModelTrait;
+use App\Helpers\Traits\Model\ModelTrait;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

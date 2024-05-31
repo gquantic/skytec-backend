@@ -25,14 +25,15 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
-        $name = explode(' ', fake()->name());
+        $fullname = fake()->name();
+        $name = explode(' ', $fullname);
 
         return [
             'avatar' => 'https://i.pravatar.cc/150?img=' . rand(1, 40),
             'manager_id' => User::query()->inRandomOrder()->first()->id ?? null,
             'department_id' => Department::query()->inRandomOrder()->first()->id ?? null,
             'phone' => $this->faker->phoneNumber(),
-            'login' => Str::slug(implode('_', $name) . '_' . Str::random(5), separator: '_'),
+            'login' => Str::slug($fullname . '_' . Str::random(5), separator: '_'),
             'firstname' => $name[0],
             'lastname' => $name[1],
             'surname' => $name[2],
