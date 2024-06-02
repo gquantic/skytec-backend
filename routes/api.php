@@ -15,6 +15,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::get('application', 'App\Http\Controllers\Api\Applications\ApplicationController@index');
+
     Route::resource('news/comments', 'App\Http\Controllers\Api\Content\NewsCommentController');
     Route::resource('news', 'App\Http\Controllers\Api\Content\NewsController');
     Route::get('emoji', 'App\Http\Controllers\Api\Content\EmojiController@index');
@@ -27,6 +29,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::resources([
             'business-trip' => \App\Http\Controllers\Api\Applications\BusinessTripApplicationController::class,
             'vacation' => \App\Http\Controllers\Api\Applications\VacationApplicationController::class,
+            'education' => \App\Http\Controllers\Api\Applications\EducationApplicationController::class,
         ]);
     });
 });

@@ -12,6 +12,13 @@ class VacationApplication extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['name'];
+
+    public function getNameAttribute($value): string
+    {
+        return 'Заявка на отпуск';
+    }
+
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);

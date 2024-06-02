@@ -9,6 +9,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class EducationApplication extends Model
 {
+    protected $appends = ['name'];
+
+    protected $guarded = [];
+
+    public function getNameAttribute($value): string
+    {
+        return "Заявка на обучение '{$this->education->title}'";
+    }
+
     public function user(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class);
