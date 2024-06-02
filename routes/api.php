@@ -13,11 +13,20 @@ Route::prefix('user')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
-    })->middleware('auth:sanctum');
+    });
 
     Route::resource('news/comments', 'App\Http\Controllers\Api\Content\NewsCommentController');
     Route::resource('news', 'App\Http\Controllers\Api\Content\NewsController');
     Route::get('emoji', 'App\Http\Controllers\Api\Content\EmojiController@index');
 
-    Route::resource('business-trip', \App\Http\Controllers\Api\Applications\BusinessTripApplicationController::class);
+    Route::resources([
+        'education' => \App\Http\Controllers\Api\EducationController::class,
+    ]);
+
+    Route::prefix('application')->group(function () {
+        Route::resources([
+            'business-trip' => \App\Http\Controllers\Api\Applications\BusinessTripApplicationController::class,
+            'vacation' => \App\Http\Controllers\Api\Applications\VacationApplicationController::class,
+        ]);
+    });
 });

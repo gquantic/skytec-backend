@@ -19,7 +19,7 @@ class NewsFactory extends Factory
         return [
             'user_id' => User::query()->inRandomOrder()->first()->id,
             'news_category_id' => NewsCategory::query()->inRandomOrder()->first()->id,
-            'slug' => Str::slug($title),
+            'slug' => Str::slug($title) . '_' . rand(9999, 999999),
             'title' => $title,
             'content' => $this->faker->paragraph(),
             'active' => rand(0, 1),

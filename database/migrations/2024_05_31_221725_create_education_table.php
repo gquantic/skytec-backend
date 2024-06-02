@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title', 255);
             $table->longText('description')->nullable();
             $table->longText('dates');
+            $table->boolean('active')->default(false);
             $table->timestamps();
         });
     }
