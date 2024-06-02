@@ -23,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::resources([
         'education' => \App\Http\Controllers\Api\EducationController::class,
+        'articles' => App\Http\Controllers\Api\Article\ArticleController::class,
     ]);
 
     Route::prefix('application')->group(function () {

@@ -24,7 +24,7 @@ class AuthController extends Controller
                 return ApiService::jsonResponse('Неверный пароль.', 403);
             }
         } else {
-            return ApiService::jsonResponse('Пользователь с таким Email не найден.', 404);
+            return ApiService::jsonResponse('Пользователь с таким логином не найден.', 404);
         }
     }
 
