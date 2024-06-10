@@ -15,6 +15,12 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::put('/user', 'App\Http\Controllers\Api\User\UserController@update');
+
+    Route::prefix('user')->group(function () {
+        Route::get('articles', 'App\Http\Controllers\Api\User\UserController@articles');
+    });
+
     Route::get('application', 'App\Http\Controllers\Api\Applications\ApplicationController@index');
 
     Route::resource('news/comments', 'App\Http\Controllers\Api\Content\NewsCommentController');

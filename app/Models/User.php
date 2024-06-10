@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Article\Article;
 use Laravel\Sanctum\HasApiTokens;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
@@ -13,17 +14,6 @@ class User extends Authenticatable
     use HasApiTokens; // Добавленный трейт для использования Passport
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
-
-    /**
      * The attributes excluded from the model's JSON form.
      *
      * @var array
@@ -33,6 +23,8 @@ class User extends Authenticatable
         'remember_token',
         'permissions',
     ];
+
+    protected $guarded = ['manager_id', 'id'];
 
     /**
      * The attributes that should be cast to native types.
@@ -85,5 +77,10 @@ class User extends Authenticatable
     public function manager(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(User::class, 'manager_id');
+    }
+
+    public function articles(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Article::class);
     }
 }

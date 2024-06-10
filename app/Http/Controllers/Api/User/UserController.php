@@ -8,6 +8,7 @@ use App\Http\Requests\User\UserLoginRequest;
 use App\Models\User;
 use App\Services\ApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
@@ -19,5 +20,27 @@ class UserController extends Controller
         }])->find($request->user()->id);
 
         return ApiService::jsonResponse($user, 200);
+    }
+
+    public function update(Request $request)
+    {
+        $data = $request->all();
+
+        try {
+            $user = $request->user();
+            $user->firstname = $data['firstname'] ?? $user->firstname;
+            $user->lastname = $data['lastname'] ?? $user->lastname;
+            $user->surname = $data['surname'] ?? $user->surname;
+            $user->phone = $data['phone'] ?? $user->phone;
+            $user->email = $data['email'] ?? $user->email;
+            $user->save();
+        } catch (\Exception $exception) {
+            throw new ApiException($exception->getMessage());
+        }
+    }
+
+    public function articles(Request $request)
+    {
+        return Auth::user()->articles;
     }
 }
