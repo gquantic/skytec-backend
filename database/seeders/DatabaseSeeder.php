@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
 
         Department::factory()->count(5)->create();
 
-        User::factory()->count(30)->create();
+        User::factory()->count(80)->create();
 
         Education::factory()->count(10)->create();
 

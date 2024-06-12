@@ -17,6 +17,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/user', 'App\Http\Controllers\Api\User\UserController@update');
 
+    Route::prefix('birthdays')->group(function () {
+        Route::get('/', 'App\Http\Controllers\Api\User\UserBirthdayController@index');
+    });
+
     Route::prefix('user')->group(function () {
         Route::get('articles', 'App\Http\Controllers\Api\User\UserController@articles');
     });
