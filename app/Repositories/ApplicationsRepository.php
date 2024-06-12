@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Applications\BusinessTripApplication;
 use App\Models\Applications\EducationApplication;
 use App\Models\Applications\VacationApplication;
+use Illuminate\Support\Facades\Auth;
 
 class ApplicationsRepository
 {
@@ -27,16 +28,16 @@ class ApplicationsRepository
 
     public function getVacationApplications(): array
     {
-        return VacationApplication::query()->limit(10)->get()->toArray();
+        return VacationApplication::query()->where('user_id', Auth::id())->limit(10)->get()->toArray();
     }
 
     public function getBusinessTripApplications(): array
     {
-        return BusinessTripApplication::query()->limit(10)->get()->toArray();
+        return BusinessTripApplication::query()->where('user_id', Auth::id())->limit(10)->get()->toArray();
     }
 
     public function getEducationApplications(): array
     {
-        return EducationApplication::query()->limit(10)->get()->toArray();
+        return EducationApplication::query()->where('user_id', Auth::id())->limit(10)->get()->toArray();
     }
 }
