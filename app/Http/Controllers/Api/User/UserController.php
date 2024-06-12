@@ -33,6 +33,7 @@ class UserController extends Controller
             $user->surname = $data['surname'] ?? $user->surname;
             $user->phone = $data['phone'] ?? $user->phone;
             $user->email = $data['email'] ?? $user->email;
+            $user->hide_phone = boolval($data['hide_phone']) ?? $user->hide_phone;
             $user->save();
         } catch (\Exception $exception) {
             throw new ApiException($exception->getMessage());
