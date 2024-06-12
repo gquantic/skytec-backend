@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->string('start_date');
             $table->date('end_date');
+            $table->string('status')->default(\Illuminate\Support\Arr::first(config('statuses.applications')));
             $table->timestamps();
         });
     }

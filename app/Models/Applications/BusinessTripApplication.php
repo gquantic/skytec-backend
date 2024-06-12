@@ -2,12 +2,13 @@
 
 namespace App\Models\Applications;
 
+use App\Helpers\Traits\Model\RequestModelTrait;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class BusinessTripApplication extends Model
 {
-    use HasFactory;
+    use RequestModelTrait;
 
     protected $guarded = [];
 
