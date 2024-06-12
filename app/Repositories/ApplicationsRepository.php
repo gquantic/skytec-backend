@@ -28,16 +28,16 @@ class ApplicationsRepository
 
     public function getVacationApplications(): array
     {
-        return VacationApplication::query()->where('user_id', Auth::id())->limit(10)->get()->toArray();
+        return VacationApplication::query()->where('user_id', Auth::id())->orderByDesc('created_at')->limit(10)->get()->toArray();
     }
 
     public function getBusinessTripApplications(): array
     {
-        return BusinessTripApplication::query()->where('user_id', Auth::id())->limit(10)->get()->toArray();
+        return BusinessTripApplication::query()->where('user_id', Auth::id())->orderByDesc('created_at')->limit(10)->get()->toArray();
     }
 
     public function getEducationApplications(): array
     {
-        return EducationApplication::query()->where('user_id', Auth::id())->limit(10)->get()->toArray();
+        return EducationApplication::query()->where('user_id', Auth::id())->orderByDesc('created_at')->limit(10)->get()->toArray();
     }
 }
