@@ -31,14 +31,21 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required',
+            'manager_id' => 'string|nullable',
+            'department_id' => 'required',
+            'position' => 'required',
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'surname' => 'required',
             'login' => 'required|unique:users',
+            'email' => 'required|unique:users|email',
+            'phone' => 'required',
+            'birthdate' => 'required',
             'password' => 'required|min:6',
         ]);
 
+        $validated['password'] = Hash::make($validated['password']);
         $user = User::query()->create($validated);
-        $user->password = Hash::make($request->password);
-        $user->save();
 
         return ApiService::jsonResponse([
                 'user' => $user,

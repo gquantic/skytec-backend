@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Article\Article;
+use App\Models\Article\ArticleCategory;
 use App\Models\Department;
 use App\Models\Education;
 use App\Models\News\News;
@@ -45,6 +47,9 @@ class DatabaseSeeder extends Seeder
         NewsCategory::factory()->count(100)->create();
 
         News::factory()->count(100)->create();
+
+        ArticleCategory::factory()->count(10)->create();
+        Article::factory()->count(200)->create();
 
         foreach (User::query()->offset(5)->limit(1000)->get() as $user) {
             $user->manager_id = rand(1,5);

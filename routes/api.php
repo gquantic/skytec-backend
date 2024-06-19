@@ -25,10 +25,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('articles', 'App\Http\Controllers\Api\User\UserController@articles');
     });
 
+
     Route::get('application', 'App\Http\Controllers\Api\Applications\ApplicationController@index');
 
-    Route::resource('news/comments', 'App\Http\Controllers\Api\Content\NewsCommentController');
-    Route::resource('news', 'App\Http\Controllers\Api\Content\NewsController');
+    Route::resources([
+        'news/comments' => 'App\Http\Controllers\Api\Content\NewsCommentController',
+        'news' => 'App\Http\Controllers\Api\Content\NewsController',
+        'articles/categories' => 'App\Http\Controllers\Api\Article\ArticleCategoryController',
+    ]);
+
     Route::get('emoji', 'App\Http\Controllers\Api\Content\EmojiController@index');
 
     Route::resources([

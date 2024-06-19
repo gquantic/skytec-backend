@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Article extends Model
 {
-    use ModelTrait;
+    use ModelTrait, HasFactory, ModelTrait;
 
     protected $guarded = [];
 
