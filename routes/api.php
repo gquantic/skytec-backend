@@ -35,6 +35,12 @@ Route::middleware('auth:sanctum')->group(function () {
         'articles/categories' => 'App\Http\Controllers\Api\Article\ArticleCategoryController',
     ]);
 
+    Route::prefix('requests')->group(function () {
+        Route::resources([
+            'axo' => 'App\Http\Controllers\Api\Requests\AxoRequestController',
+        ]);
+    });
+
     Route::get('emoji', 'App\Http\Controllers\Api\Content\EmojiController@index');
 
     Route::resources([
