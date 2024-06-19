@@ -23,6 +23,11 @@ class UserBirthdayController extends Controller
         return $this->userBirthdayService->getUpcomingBirthdays();
     }
 
+    public function today()
+    {
+        return $this->userBirthdayService->getTodayBirthdays();
+    }
+
     /**
      * Store a newly created resource in storage.
      */
