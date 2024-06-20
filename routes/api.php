@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     Route::put('/user', 'App\Http\Controllers\Api\User\UserController@update');
+    Route::post('/user', 'App\Http\Controllers\Api\AuthController@register');
 
     Route::prefix('birthdays')->group(function () {
         Route::get('/', 'App\Http\Controllers\Api\User\UserBirthdayController@index');
@@ -38,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('requests')->group(function () {
         Route::resources([
             'axo' => 'App\Http\Controllers\Api\Requests\AxoRequestController',
+            'help-desk' => 'App\Http\Controllers\Api\Requests\HelpDeskRequestController',
         ]);
     });
 

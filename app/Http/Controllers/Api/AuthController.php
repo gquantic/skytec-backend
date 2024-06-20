@@ -52,4 +52,27 @@ class AuthController extends Controller
                 'token' => $user->createToken('auth_token')->accessToken->token,
             ], 200);
     }
+
+    public function registerEmployee(Request $request)
+    {
+        $validated = $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'surname' => 'required',
+            'employment_date' => 'required|date',
+            'department_id' => 'required',
+            'legal_entity' => 'required',
+            'position' => 'required',
+            'manager_id' => 'string|nullable',
+
+        ]);
+
+        $validated['password'] = Hash::make($validated['password']);
+        $user = User::query()->create($validated);
+
+        return ApiService::jsonResponse([
+            'user' => $user,
+            'token' => $user->createToken('auth_token')->accessToken->token,
+        ], 200);
+    }
 }
