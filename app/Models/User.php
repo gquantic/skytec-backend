@@ -83,4 +83,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Article::class);
     }
+
+    public function congrats(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(BirthdayCongrats::class, 'to_id');
+    }
 }

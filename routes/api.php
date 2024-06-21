@@ -21,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('birthdays')->group(function () {
         Route::get('/', 'App\Http\Controllers\Api\User\UserBirthdayController@index');
         Route::get('/today', 'App\Http\Controllers\Api\User\UserBirthdayController@today');
+        Route::post('/send', 'App\Http\Controllers\Api\User\UserBirthdayController@send');
+        Route::get('/congrats', 'App\Http\Controllers\Api\User\UserBirthdayController@congrats');
     });
 
     Route::prefix('user')->group(function () {

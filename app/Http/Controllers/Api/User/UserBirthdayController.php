@@ -3,8 +3,13 @@
 namespace App\Http\Controllers\Api\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\BirthdayCongration;
+use App\Models\BirthdayCongrats;
+use App\Models\User;
+use App\Services\ApiService;
 use App\Services\UserBirthdayService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class UserBirthdayController extends Controller
 {
@@ -28,35 +33,28 @@ class UserBirthdayController extends Controller
         return $this->userBirthdayService->getTodayBirthdays();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function send(Request $request)
     {
-        //
+        $data = $request->validate([
+            'user_id' => 'required|integer|exists:users,id',
+            'message' => 'string|nullable',
+            'surprise' => 'string|nullable',
+            'anonymous' => 'boolean|nullable',
+        ]);
+
+        $birthdayCongrats = new BirthdayCongrats();
+        $birthdayCongrats->user_id = Auth::id();
+        $birthdayCongrats->to_id = $data['user_id'];
+        $birthdayCongrats->message = $data['message'] ?? '';
+        $birthdayCongrats->surprise = $data['surprise'] ?? 'none';
+        $birthdayCongrats->anonymous = boolval($data['anonymous'] ?? false);
+        $birthdayCongrats->save();
+
+        return ApiService::jsonResponse('Поздравление отправлено.');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function congrats(Request $request)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return Auth::user()->congrats;
     }
 }
