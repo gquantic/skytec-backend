@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('business_ideas', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable();
+            $table->string('name')->nullable();
+            $table->longText('idea');
+            $table->boolean('anonymous')->default(false);
             $table->timestamps();
         });
     }

@@ -15,6 +15,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::post('business-idea', 'App\Http\Controllers\Api\BusinessIdeaController@store');
+
     Route::put('/user', 'App\Http\Controllers\Api\User\UserController@update');
     Route::post('/user', 'App\Http\Controllers\Api\AuthController@register');
     Route::get('/user/search', 'App\Http\Controllers\Api\SearchController@searchUser');
