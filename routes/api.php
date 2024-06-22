@@ -17,6 +17,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/user', 'App\Http\Controllers\Api\User\UserController@update');
     Route::post('/user', 'App\Http\Controllers\Api\AuthController@register');
+    Route::get('/user/search', 'App\Http\Controllers\Api\SearchController@searchUser');
 
     Route::prefix('birthdays')->group(function () {
         Route::get('/', 'App\Http\Controllers\Api\User\UserBirthdayController@index');
