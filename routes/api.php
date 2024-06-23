@@ -15,6 +15,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
 
+    Route::get('emojis', 'App\Http\Controllers\Api\EmojiController@getEmojis');
+
     Route::post('business-idea', 'App\Http\Controllers\Api\BusinessIdeaController@store');
 
     Route::put('/user', 'App\Http\Controllers\Api\User\UserController@update');

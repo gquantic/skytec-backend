@@ -37,18 +37,18 @@ class UpdateEmojis extends Command
      */
     public function handle()
     {
+        $emojis = ['heart', 'like', 'dislike', 'smile', 'ok', 'wow', 'fire', 'love', 'star', 'happy', 'laugh', 'scientist', 'clown', 'embarrassed',
+                    'cry', 'angry', 'happiness', 'shock', 'brain_explosion', 'suspicion', 'cool'];
         $paste = [];
-        foreach ($this->emojiService->getAllEmojis() as $shortName => $image) {
-            $exploded = explode('_', $shortName);
 
-            if (count($exploded) < 2) {
-                $paste[] = [
-                    'slug' => $shortName,
-                    'image' => $image,
-                ];
-            }
+
+        foreach ($emojis as $emoji) {
+            $paste[] = [
+                'slug' => $emoji,
+                'image' => 'emojis/' . $emoji . '.png',
+            ];
         }
 
-        \App\Models\Emoji::query()->insertOrIgnore($paste);
+        \App\Models\Emoji::query()->insert($paste);
     }
 }
