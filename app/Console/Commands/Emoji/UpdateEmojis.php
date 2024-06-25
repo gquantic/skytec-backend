@@ -45,7 +45,7 @@ class UpdateEmojis extends Command
         foreach ($emojis as $emoji) {
             $paste[] = [
                 'slug' => $emoji,
-                'image' => 'emojis/' . $emoji . '.png',
+                'image' => $emoji . '.png',
             ];
         }
 
