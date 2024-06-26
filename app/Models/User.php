@@ -24,7 +24,10 @@ class User extends Authenticatable
         'permissions',
     ];
 
-    protected $guarded = ['manager_id', 'id'];
+    protected $guarded = [
+        'manager_id',
+        'id',
+    ];
 
     /**
      * The attributes that should be cast to native types.
