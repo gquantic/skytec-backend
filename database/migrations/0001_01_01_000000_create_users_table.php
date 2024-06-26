@@ -22,6 +22,7 @@ return new class extends Migration
             $table->longText('workplace_requirements')->nullable();
 
             $table->string('avatar')->default('https://d11a6trkgmumsb.cloudfront.net/original/3X/d/8/d8b5d0a738295345ebd8934b859fa1fca1c8c6ad.jpeg');
+            $table->string('name')->nullable();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->string('surname')->nullable();
