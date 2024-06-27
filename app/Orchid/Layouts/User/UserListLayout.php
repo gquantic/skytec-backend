@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Orchid\Layouts\User;
 
+use App\Models\Department;
 use Orchid\Platform\Models\User;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\DropDown;
@@ -34,17 +35,21 @@ class UserListLayout extends Table
                 ->filter(Input::make())
                 ->render(fn (User $user) => new Persona($user->presenter())),
 
+            TD::make('login', __('Login'))
+                ->sort()
+                ->filter(Input::make()),
+
+            TD::make('department_id', __('Подразделение'))
+                ->render(function (User $user) {
+                    return $user->department->title ?? 'Не назначено';
+                }),
+
+            TD::make('position', __('Должность')),
+
             TD::make('email', __('Email'))
                 ->sort()
                 ->cantHide()
-                ->filter(Input::make())
-                ->render(fn (User $user) => ModalToggle::make($user->email)
-                    ->modal('asyncEditUserModal')
-                    ->modalTitle($user->presenter()->title())
-                    ->method('saveUser')
-                    ->asyncParameters([
-                        'user' => $user->id,
-                    ])),
+                ->filter(Input::make()),
 
             TD::make('created_at', __('Создан'))
                 ->usingComponent(DateTimeSplit::class)

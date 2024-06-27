@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Article\Article;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Laravel\Sanctum\HasApiTokens;
 use Orchid\Filters\Types\Like;
 use Orchid\Filters\Types\Where;
@@ -65,7 +66,7 @@ class User extends Authenticatable
         'created_at',
     ];
 
-    protected $appends = ['name'];
+//    protected $appends = ['name'];
 
     /**
      * Get the user's full name.
@@ -75,6 +76,18 @@ class User extends Authenticatable
     public function getNameAttribute(): string
     {
         return "{$this->lastname} {$this->firstname} {$this->surname}";
+    }
+
+    public function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => "{$this->lastname} {$this->firstname} {$this->surname}"
+        );
+    }
+
+    public function department(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Department::class);
     }
 
     public function manager(): \Illuminate\Database\Eloquent\Relations\BelongsTo

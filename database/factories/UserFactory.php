@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Models\Department;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -34,6 +35,7 @@ class UserFactory extends Factory
             'department_id' => Department::query()->inRandomOrder()->first()->id ?? null,
             'phone' => $this->faker->phoneNumber(),
             'login' => Str::slug($fullname . '_' . Str::random(5), separator: '_'),
+            'employment_date' => Carbon::now()->subDays(rand(10, 1000))->format('Y-m-d'),
             'firstname' => $name[0],
             'lastname' => $name[1],
             'surname' => $name[2],

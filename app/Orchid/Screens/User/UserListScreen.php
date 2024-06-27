@@ -7,6 +7,7 @@ namespace App\Orchid\Screens\User;
 use App\Orchid\Layouts\User\UserEditLayout;
 use App\Orchid\Layouts\User\UserFiltersLayout;
 use App\Orchid\Layouts\User\UserListLayout;
+use App\Services\OrchidService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Orchid\Platform\Models\User;
@@ -22,13 +23,21 @@ class UserListScreen extends Screen
      *
      * @return array
      */
-    public function query(): iterable
+    public function query(Request $request): iterable
     {
+        $users = \App\Models\User::query()
+            ->with('roles');
+
+        if ($email = OrchidService::getFilter($request, 'email')) {
+            $users->where('email', $email);
+        }
+
+        if ($login = OrchidService::getFilter($request, 'login')) {
+            $users->where('login', $login);
+        }
+
         return [
-            'users' => User::with('roles')
-                ->filters(UserFiltersLayout::class)
-                ->defaultSort('id', 'desc')
-                ->paginate(),
+            'users' => $users->paginate(),
         ];
     }
 
@@ -80,8 +89,8 @@ class UserListScreen extends Screen
             UserFiltersLayout::class,
             UserListLayout::class,
 
-            Layout::modal('asyncEditUserModal', UserEditLayout::class)
-                ->async('asyncGetUser'),
+//            Layout::modal('asyncEditUserModal', UserEditLayout::class)
+//                ->async('asyncGetUser'),
         ];
     }
 
