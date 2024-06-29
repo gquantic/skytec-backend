@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('article_category_id');
             $table->foreignId('user_id');
-            $table->integer('views')->default(0);
             $table->string('title', 255);
             $table->longText('content');
             $table->boolean('active')->default(true);
             $table->boolean('moderated')->default(false);
+            $table->bigInteger('views')->nullable();
             $table->timestamps();
         });
     }

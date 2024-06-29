@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('video')->nullable();
             $table->boolean('active')->default(false);
             $table->boolean('moderated')->default(false);
+            $table->bigInteger('views')->nullable();
             $table->timestamps();
         });
     }

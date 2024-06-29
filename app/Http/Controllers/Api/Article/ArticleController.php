@@ -57,7 +57,14 @@ class ArticleController extends Controller
      */
     public function update(Request $request, Article $article)
     {
-        //
+        if ($article->user_id === $request->user()->id) {
+            $article->update($request->all());
+        }
+
+        $article->updateViews(Auth::id());
+        $article->save();
+
+        return $article;
     }
 
     /**

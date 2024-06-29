@@ -57,6 +57,8 @@ Route::middleware('auth:sanctum')->group(function () {
         'articles' => App\Http\Controllers\Api\Article\ArticleController::class,
     ]);
 
+    Route::post('/articles/views');
+
     Route::prefix('application')->group(function () {
         Route::resources([
             'business-trip' => \App\Http\Controllers\Api\Applications\BusinessTripApplicationController::class,

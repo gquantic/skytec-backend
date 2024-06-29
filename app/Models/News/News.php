@@ -3,13 +3,19 @@
 namespace App\Models\News;
 
 use App\Helpers\Traits\Model\ModelTrait;
+use App\Helpers\Traits\Model\ViewsTrait;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class News extends Model
 {
-    use HasFactory, ModelTrait;
+    use HasFactory, ModelTrait, ViewsTrait;
+
+    protected $casts = [
+    ];
+
+    protected $appends = ['views_count'];
 
     protected $table = 'news';
 

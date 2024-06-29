@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Api\Content;
 
+use App\Exceptions\BaseException;
 use App\Http\Controllers\Controller;
 use App\Models\News\News;
 use App\Repositories\Content\NewsRepository;
+use App\Services\ApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class NewsController extends Controller
 {
@@ -53,9 +56,20 @@ class NewsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, News $news)
     {
-        //
+        try {
+            if ($news->user_id === $request->user()->id) {
+                $news->update($request->all());
+            }
+
+            $news->updateViews(Auth::id());
+            $news->save();
+        } catch (BaseException $exception) {
+            return ApiService::jsonResponse($exception->getMessage());
+        }
+
+        return $news;
     }
 
     /**
