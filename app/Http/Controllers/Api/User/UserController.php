@@ -17,7 +17,7 @@ class UserController extends Controller
     {
         $user = User::query()->with(['manager' => function ($query) {
             $query->select('id', 'firstname', 'lastname', 'surname');
-        }])->find($request->user()->id);
+        }, 'department'])->find($request->user()->id);
 
         return ApiService::jsonResponse($user, 200);
     }
