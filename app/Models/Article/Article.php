@@ -15,7 +15,6 @@ class Article extends Model
     protected $guarded = [];
 
     protected $casts = [
-        'news' => 'array',
     ];
 
     protected $appends = ['views_count'];
