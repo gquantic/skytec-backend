@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\Content;
 use App\Exceptions\BaseException;
 use App\Http\Controllers\Controller;
 use App\Models\News\News;
+use App\Models\News\NewsReaction;
 use App\Repositories\Content\NewsRepository;
 use App\Services\ApiService;
 use Illuminate\Http\Request;
@@ -42,14 +43,14 @@ class NewsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $slug)
+    public function show(int $id)
     {
         return News::query()
             ->orderByDesc('created_at')
             ->with(['category', 'user', 'comments' => function ($query) {
                 $query->orderByDesc('created_at');
             }, 'comments.user'])
-            ->where('slug', $slug)
+            ->where('id', $id)
             ->first();
     }
 
@@ -70,6 +71,22 @@ class NewsController extends Controller
         }
 
         return $news;
+    }
+
+    public function insertReaction(Request $request): \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Builder|array|null
+    {
+        $data = $request->validate([
+            'news_id' => 'required|exists:news,id',
+            'emoji_id' => 'required|exists:emoji,id',
+        ]);
+
+        NewsReaction::query()->create([
+            'news_id' => $request->post('news_id'),
+            'user_id' => Auth::id(),
+            'emoji_id' => $request->post('emoji_id'),
+        ]);
+
+        return News::query()->find($request->post('news_id'));
     }
 
     /**

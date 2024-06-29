@@ -43,6 +43,8 @@ Route::middleware('auth:sanctum')->group(function () {
         'articles/categories' => 'App\Http\Controllers\Api\Article\ArticleCategoryController',
     ]);
 
+    Route::post('news/reactions', 'App\Http\Controllers\Api\Content\NewsController@insertReaction');
+
     Route::prefix('requests')->group(function () {
         Route::resources([
             'axo' => 'App\Http\Controllers\Api\Requests\AxoRequestController',
