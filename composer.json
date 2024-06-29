@@ -12,6 +12,7 @@
         "laravel/tinker": "^2.9",
         "orchid/platform": "^14.23",
         "overtrue/laravel-emoji": "^2.1",
+        "sentry/sentry-laravel": "^4.6",
         "seyyedam7/laravel-html-parser": "^2.2"
     },
     "require-dev": {
