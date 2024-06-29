@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\Article;
 
+use App\Exceptions\BaseException;
 use App\Http\Controllers\Controller;
 use App\Models\Article\Article;
 use App\Services\ApiService;
@@ -38,7 +39,7 @@ class ArticleController extends Controller
             ));
 
             return ApiService::jsonResponse($article, 200);
-        } catch (\Exception $exception) {
+        } catch (BaseException $exception) {
             return ApiService::jsonResponse($exception->getMessage(), 500);
         }
     }

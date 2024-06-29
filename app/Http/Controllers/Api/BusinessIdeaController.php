@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Events\BusinessIdeaSend;
+use App\Exceptions\BaseException;
 use App\Http\Controllers\Controller;
 use App\Models\BusinessIdea;
 use App\Services\ApiService;
@@ -40,7 +41,7 @@ class BusinessIdeaController extends Controller
             event(new BusinessIdeaSend($businessIdea));
 
             return ApiService::jsonResponse($businessIdea);
-        } catch (\Exception $exception) {
+        } catch (BaseException $exception) {
             return ApiService::jsonResponse($exception->getMessage(), 500);
         }
     }
