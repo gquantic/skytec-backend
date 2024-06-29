@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Article\Article;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Laravel\Sanctum\HasApiTokens;
 use Orchid\Filters\Types\Like;
@@ -23,6 +24,9 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'permissions',
+        'created_at',
+        'updated_at',
+        'email_verified_at',
     ];
 
     protected $guarded = [
@@ -76,6 +80,16 @@ class User extends Authenticatable
     public function getNameAttribute(): string
     {
         return "{$this->lastname} {$this->firstname} {$this->surname}";
+    }
+
+    public function getEmploymentDateAttribute($value): string
+    {
+        return Carbon::parse($value)->format('d.m.Y');
+    }
+
+    public function getBirthdateAttribute($value): string
+    {
+        return Carbon::parse($value)->format('d.m.Y');
     }
 
     public function name(): Attribute

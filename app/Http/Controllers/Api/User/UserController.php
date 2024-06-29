@@ -40,6 +40,19 @@ class UserController extends Controller
         }
     }
 
+    public function show(int $id)
+    {
+        $user = User::query()->with(['manager' => function ($query) {
+            $query->select('id', 'firstname', 'lastname', 'surname');
+        }, 'department'])->find($id);
+
+        if ($user->hide_phone) {
+            $user->phone = 'Скрыт';
+        }
+
+        return ApiService::jsonResponse($user, 200);
+    }
+
     public function articles(Request $request)
     {
         return Auth::user()->articles;
