@@ -10,6 +10,6 @@ class NewsRepository
     {
         return News::query()
             ->active()
-            ->select(['id', 'news_category_id', 'user_id', 'slug', 'title', 'content', 'created_at']);
+            ->select(['id', 'views', 'news_category_id', 'user_id', 'slug', 'title', 'content', 'created_at']);
     }
 }
