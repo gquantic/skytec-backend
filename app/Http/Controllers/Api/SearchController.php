@@ -13,7 +13,9 @@ class SearchController extends Controller
         $search = $request->get('fullname');
         $search = explode(' ', $search);
 
-        $users = User::query();
+        $users = User::query()->with(['manager' => function ($query) {
+            $query->select('id', 'firstname', 'lastname', 'surname');
+        }, 'department']);
 
         if (count($search) > 2) {
             $users->where('surname', 'like', "{$search[0]}%")

@@ -19,7 +19,7 @@ class UserController extends Controller
             $query->select('id', 'firstname', 'lastname', 'surname');
         }, 'department'])->find($request->user()->id);
 
-        return ApiService::jsonResponse($user, 200);
+        return ApiService::jsonResponse(['user' => $user, 'permissions' => $user->permissions], 200);
     }
 
     public function update(Request $request)
