@@ -83,3 +83,6 @@ Route::screen('roles', RoleListScreen::class)
     ->breadcrumbs(fn (Trail $trail) => $trail
         ->parent('platform.index')
         ->push(__('Roles'), route('platform.systems.roles')));
+
+Route::screen('configs', \App\Orchid\Screens\Config\ConfigListScreen::class)
+    ->name('platform.systems.configs');
