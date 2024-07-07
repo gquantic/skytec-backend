@@ -1,0 +1,238 @@
+diff --git a/app/Http/Controllers/Api/AuthController.php b/app/Http/Controllers/Api/AuthController.php
+index 2633e63..99b986f 100644
+--- a/app/Http/Controllers/Api/AuthController.php
++++ b/app/Http/Controllers/Api/AuthController.php
+@@ -8,13 +8,21 @@
+ use App\Services\ApiService;
+ use Illuminate\Http\Request;
+ use Illuminate\Support\Facades\Hash;
++use LdapRecord\Container;
++use LdapRecord\Models\ActiveDirectory\User as LdapUser;
+ 
+ class AuthController extends Controller
+ {
+     public function login(UserLoginRequest $request)
+     {
+-        if ($user = User::query()->where('login', $request->login)->first()) {
+-            if (Hash::check($request->password, $user->password)) {
++        $credentials = $request->only('login', 'password');
++
++        // Проверяем наличие пользователя в локальной базе данных
++        $user = User::query()->where('login', $credentials['login'])->first();
++
++        if ($user) {
++            // Проверяем пароль в локальной базе данных
++            if (Hash::check($credentials['password'], $user->password)) {
+                 $token = $user->createToken('auth_token')->plainTextToken;
+                 return ApiService::jsonResponse([
+                     'user' => $user,
+@@ -24,10 +32,48 @@ public function login(UserLoginRequest $request)
+                 return ApiService::jsonResponse('Неверный пароль.', 403);
+             }
+         } else {
++            // Пытаемся аутентифицироваться через LDAP
++            $ldapUser = $this->attemptLdapAuthentication($credentials['login'], $credentials['password']);
++
++            if ($ldapUser) {
++                // Создаем нового пользователя в локальной базе данных
++                $user = User::create([
++                    'name' => $ldapUser->getFirstAttribute('cn'),
++                    'email' => $ldapUser->getFirstAttribute('mail'),
++                    'login' => $credentials['login'],
++                    'password' => Hash::make($credentials['password']),
++                ]);
++
++                $token = $user->createToken('auth_token')->plainTextToken;
++
++                return ApiService::jsonResponse([
++                    'user' => $user,
++                    'token' => $token,
++                ], 200);
++            }
++
+             return ApiService::jsonResponse('Пользователь с таким логином не найден.', 404);
+         }
+     }
+ 
++    private function attemptLdapAuthentication($username, $password)
++    {
++        try {
++            $connection = Container::getConnection('default');
++
++            $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('uid', $username);
++
++            if ($ldapUser && $connection->auth()->attempt($ldapUser->getDn(), $password)) {
++                return $ldapUser;
++            }
++        } catch (\Exception $e) {
++            return null;
++        }
++
++        return null;
++    }
++
++
+     public function register(Request $request)
+     {
+         $validated = $request->validate([
+diff --git a/app/Models/User.php b/app/Models/User.php
+index 9fef59e..b7eb6d3 100644
+--- a/app/Models/User.php
++++ b/app/Models/User.php
+@@ -5,15 +5,18 @@
+ use App\Models\Article\Article;
+ use Carbon\Carbon;
+ use Illuminate\Database\Eloquent\Casts\Attribute;
++use Illuminate\Notifications\Notifiable;
+ use Laravel\Sanctum\HasApiTokens;
+ use Orchid\Filters\Types\Like;
+ use Orchid\Filters\Types\Where;
+ use Orchid\Filters\Types\WhereDateStartEnd;
+ use Orchid\Platform\Models\User as Authenticatable;
++use LdapRecord\Laravel\Auth\LdapAuthenticatable;
++use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
+ 
+-class User extends Authenticatable
++class User extends Authenticatable implements LdapAuthenticatable
+ {
+-    use HasApiTokens; // Добавленный трейт для использования Passport
++    use Notifiable, AuthenticatesWithLdap, HasApiTokens;
+ 
+     /**
+      * The attributes excluded from the model's JSON form.
+diff --git a/composer.json b/composer.json
+index c0ee570..8f15d2a 100644
+--- a/composer.json
++++ b/composer.json
+@@ -7,6 +7,7 @@
+     "require": {
+         "php": "^8.2",
+         "directorytree/ldaprecord": "^3.6",
++        "directorytree/ldaprecord-laravel": "^3.3",
+         "laravel/framework": "^11.0",
+         "laravel/sanctum": "^4.0",
+         "laravel/tinker": "^2.9",
+diff --git a/composer.lock b/composer.lock
+index d23a1bc..98ddd83 100644
+--- a/composer.lock
++++ b/composer.lock
+@@ -4,7 +4,7 @@
+         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+         "This file is @generated automatically"
+     ],
+-    "content-hash": "a2fb6fbf59448cdb231512792beda345",
++    "content-hash": "c7a53ef88e1b241d259886538291c830",
+     "packages": [
+         {
+             "name": "brick/math",
+@@ -286,6 +286,73 @@
+             ],
+             "time": "2024-05-13T15:57:23+00:00"
+         },
++        {
++            "name": "directorytree/ldaprecord-laravel",
++            "version": "v3.3.3",
++            "source": {
++                "type": "git",
++                "url": "https://github.com/DirectoryTree/LdapRecord-Laravel.git",
++                "reference": "518fd4c14f839ee9c2d7eb9d4697615f8e18748b"
++            },
++            "dist": {
++                "type": "zip",
++                "url": "https://api.github.com/repos/DirectoryTree/LdapRecord-Laravel/zipball/518fd4c14f839ee9c2d7eb9d4697615f8e18748b",
++                "reference": "518fd4c14f839ee9c2d7eb9d4697615f8e18748b",
++                "shasum": ""
++            },
++            "require": {
++                "directorytree/ldaprecord": "^v3.3",
++                "ext-json": "*",
++                "ext-ldap": "*",
++                "illuminate/support": "^8.0|^9.0|^10.0|^11.0",
++                "php": ">=8.1",
++                "ramsey/uuid": "*"
++            },
++            "require-dev": {
++                "laravel/pint": "^1.9",
++                "laravel/sanctum": "*",
++                "mockery/mockery": "^1.0",
++                "orchestra/testbench": "^6.0|^7.0|^8.0|^9.0",
++                "phpunit/phpunit": "^8.0|^9.0|^10.0|^11.0",
++                "spatie/ray": "^1.28"
++            },
++            "type": "project",
++            "extra": {
++                "laravel": {
++                    "providers": [
++                        "LdapRecord\\Laravel\\LdapServiceProvider",
++                        "LdapRecord\\Laravel\\LdapAuthServiceProvider"
++                    ]
++                }
++            },
++            "autoload": {
++                "psr-4": {
++                    "LdapRecord\\Laravel\\": "src/"
++                }
++            },
++            "notification-url": "https://packagist.org/downloads/",
++            "license": [
++                "MIT"
++            ],
++            "description": "LDAP Authentication & Management for Laravel.",
++            "keywords": [
++                "adldap2",
++                "laravel",
++                "ldap",
++                "ldaprecord"
++            ],
++            "support": {
++                "issues": "https://github.com/DirectoryTree/LdapRecord-Laravel/issues",
++                "source": "https://github.com/DirectoryTree/LdapRecord-Laravel/tree/v3.3.3"
++            },
++            "funding": [
++                {
++                    "url": "https://github.com/stevebauman",
++                    "type": "github"
++                }
++            ],
++            "time": "2024-06-17T03:43:03+00:00"
++        },
+         {
+             "name": "doctrine/inflector",
+             "version": "2.0.10",
+diff --git a/config/auth.php b/config/auth.php
+index 0ba5d5d..bedbf4d 100644
+--- a/config/auth.php
++++ b/config/auth.php
+@@ -60,17 +60,25 @@
+     */
+ 
+     'providers' => [
++        // ...
++
+         'users' => [
+-            'driver' => 'eloquent',
+-            'model' => env('AUTH_MODEL', App\Models\User::class),
++            'driver' => 'ldap',
++            'model' => LdapRecord\Models\openLDAP\User::class,
++            'rules' => [],
++            'scopes' => [],
++            'database' => [
++                'model' => App\Models\User::class,
++                'sync_passwords' => false,
++                'sync_attributes' => [
++                    'name' => 'cn',
++                    'email' => 'mail',
++                ],
++            ],
+         ],
+-
+-        // 'users' => [
+-        //     'driver' => 'database',
+-        //     'table' => 'users',
+-        // ],
+     ],
+ 
++
+     /*
+     |--------------------------------------------------------------------------
+     | Resetting Passwords

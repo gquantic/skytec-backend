@@ -8,13 +8,21 @@ use App\Models\User;
 use App\Services\ApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use LdapRecord\Container;
+use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 
 class AuthController extends Controller
 {
     public function login(UserLoginRequest $request)
     {
-        if ($user = User::query()->where('login', $request->login)->first()) {
-            if (Hash::check($request->password, $user->password)) {
+        $credentials = $request->only('login', 'password');
+
+        // Проверяем наличие пользователя в локальной базе данных
+        $user = User::query()->where('login', $credentials['login'])->first();
+
+        if ($user) {
+            // Проверяем пароль в локальной базе данных
+            if (Hash::check($credentials['password'], $user->password)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
                 return ApiService::jsonResponse([
                     'user' => $user,
@@ -24,9 +32,47 @@ class AuthController extends Controller
                 return ApiService::jsonResponse('Неверный пароль.', 403);
             }
         } else {
+            // Пытаемся аутентифицироваться через LDAP
+            $ldapUser = $this->attemptLdapAuthentication($credentials['login'], $credentials['password']);
+
+            if ($ldapUser) {
+                // Создаем нового пользователя в локальной базе данных
+                $user = User::create([
+                    'name' => $ldapUser->getFirstAttribute('cn'),
+                    'email' => $ldapUser->getFirstAttribute('mail'),
+                    'login' => $credentials['login'],
+                    'password' => Hash::make($credentials['password']),
+                ]);
+
+                $token = $user->createToken('auth_token')->plainTextToken;
+
+                return ApiService::jsonResponse([
+                    'user' => $user,
+                    'token' => $token,
+                ], 200);
+            }
+
             return ApiService::jsonResponse('Пользователь с таким логином не найден.', 404);
         }
     }
+
+    private function attemptLdapAuthentication($username, $password)
+    {
+        try {
+            $connection = Container::getConnection('default');
+
+            $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('uid', $username);
+
+            if ($ldapUser && $connection->auth()->attempt($ldapUser->getDn(), $password)) {
+                return $ldapUser;
+            }
+        } catch (\Exception $e) {
+            return null;
+        }
+
+        return null;
+    }
+
 
     public function register(Request $request)
     {
