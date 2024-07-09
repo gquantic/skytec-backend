@@ -16,7 +16,7 @@ class MakeUser extends Command
      *
      * @var string
      */
-    protected $signature = 'make:admin {name?} {login?} {email?} {password?}';
+    protected $signature = 'make:user {name?} {login?} {email?} {password?} {--admin}';
 
     /**
      * The console command description.
@@ -31,7 +31,6 @@ class MakeUser extends Command
     public function handle(): void
     {
         try {
-//            $userId = $this->option('id');
             $this->info('creating...');
 
             empty($userId)
@@ -44,11 +43,11 @@ class MakeUser extends Command
 
     protected function createNewUser(): void
     {
-        $this->createAdmin(
-                $this->argument('name') ?? $this->ask('What is your name?', 'admin'),
-                $this->argument('login') ?? $this->ask('Login', 'admin'),
-                $this->argument('email') ?? $this->ask('What is your email?', 'admin@admin.com'),
-                $this->argument('password') ?? $this->secret('What is the password?')
+        $this->createUser(
+                $this->argument('name') ?? $this->ask('Имя:', 'admin'),
+                $this->argument('login') ?? $this->ask('Логин:', 'admin'),
+                $this->argument('email') ?? $this->ask('Электронная почта:', 'admin@admin.com'),
+                $this->argument('password') ?? $this->secret('Пароль:')
             );
 
         $this->info('User created successfully.');
@@ -59,16 +58,18 @@ class MakeUser extends Command
      *
      * @throws \Throwable
      */
-    public function createAdmin(string $name, string $login, string $email, string $password): void
+    public function createUser(string $name, string $login, string $email, string $password): void
     {
         $data = [
             'name'        => $name,
             'login'       => $login,
             'email'       => $email,
             'password'    => Hash::make($password),
-            'permissions' => Dashboard::getAllowAllPermission(),
         ];
-//        dd($data);
+
+        if ($this->hasOption('admin') && $this->option('admin')) {
+            $data['permissions'] = Dashboard::getAllowAllPermission();
+        }
 
         User::query()->insert($data);
 

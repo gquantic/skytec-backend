@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('news_categories', function (Blueprint $table) {
             $table->id();
-            $table->string('slug')->unique();
             $table->string('title');
             $table->longText('description')->nullable();
             $table->timestamps();
