@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserLoginRequest;
 use App\Models\User;
+use App\Repositories\UserRepository;
 use App\Services\ApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -13,20 +14,25 @@ use LdapRecord\Models\openLDAP\User as LdapUser;
 
 class AuthController extends Controller
 {
+    protected UserRepository $userRepository;
+    public function __construct(UserRepository $userRepository)
+    {
+        $this->userRepository = $userRepository;
+    }
+
     public function login(UserLoginRequest $request)
     {
         $credentials = $request->only('login', 'password');
 
         // Проверяем наличие пользователя в локальной базе данных
         $user = User::query()->where('login', $credentials['login'])->first();
-//        dd($user);
 
         if ($user) {
             // Проверяем пароль в локальной базе данных
             if (Hash::check($credentials['password'], $user->password)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
                 return ApiService::jsonResponse([
-                    'user' => $user,
+                    'user' => $this->userRepository->getUserData($user->id),
                     'token' => $token,
                 ], 200);
             } else {
@@ -37,20 +43,25 @@ class AuthController extends Controller
             $ldapUser = $this->attemptLdapAuthentication($credentials['login'], $credentials['password']);
 
             if ($ldapUser) {
-//                dd($ldapUser->getFirstAttribute('uid'));
-//                dd($credentials['login']);
+                $fullName = $ldapUser->getFirstAttribute('cn');
+                $explodedName = explode(' ', $fullName);
+
                 // Создаем нового пользователя в локальной базе данных
-                $user = new User();
-                $user->login = $credentials['login'];
-                $user->email = $ldapUser->getFirstAttribute('mail');
-                $user->name = $ldapUser->getFirstAttribute('cn');
-                $user->password = Hash::make($credentials['password']);
-                $user->save();
+                $user = $this->userRepository->createUser(data: [
+                    'login' => $credentials['login'],
+                    'email' => $ldapUser->getFirstAttribute('mail'),
+                    'name' => $ldapUser->getFirstAttribute('cn'),
+                    'firstname' => $explodedName[0] ?? '',
+                    'lastname' => $explodedName[1] ?? '',
+                    'surname' => $explodedName[2] ?? '',
+                    'phone' => $ldapUser->getFirstAttribute('telephonenumber'),
+                    'password' => Hash::make($credentials['password']),
+                ]);
 
                 $token = $user->createToken('auth_token')->plainTextToken;
 
                 return ApiService::jsonResponse([
-                    'user' => $user,
+                    'user' => $this->userRepository->getUserData($user->id),
                     'token' => $token,
                 ], 200);
             }

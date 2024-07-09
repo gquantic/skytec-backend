@@ -26,7 +26,7 @@ class NewsController extends Controller
     public function index()
     {
         return $this->newsRepository->all()->with(['category' => function ($query) {
-            $query->select('id', 'slug', 'title');
+            $query->select('id', 'title');
         }, 'user' => function ($query) {
             $query->select('id', 'avatar', 'firstname', 'lastname', 'surname');
         }])->get();
