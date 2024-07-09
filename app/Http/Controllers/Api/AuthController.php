@@ -9,7 +9,7 @@ use App\Services\ApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use LdapRecord\Container;
-use LdapRecord\Models\ActiveDirectory\User as LdapUser;
+use LdapRecord\Models\openLDAP\User as LdapUser;
 
 class AuthController extends Controller
 {
@@ -19,6 +19,7 @@ class AuthController extends Controller
 
         // Проверяем наличие пользователя в локальной базе данных
         $user = User::query()->where('login', $credentials['login'])->first();
+//        dd($user);
 
         if ($user) {
             // Проверяем пароль в локальной базе данных
@@ -36,13 +37,15 @@ class AuthController extends Controller
             $ldapUser = $this->attemptLdapAuthentication($credentials['login'], $credentials['password']);
 
             if ($ldapUser) {
+//                dd($ldapUser->getFirstAttribute('uid'));
+//                dd($credentials['login']);
                 // Создаем нового пользователя в локальной базе данных
-                $user = User::create([
-                    'name' => $ldapUser->getFirstAttribute('cn'),
-                    'email' => $ldapUser->getFirstAttribute('mail'),
-                    'login' => $credentials['login'],
-                    'password' => Hash::make($credentials['password']),
-                ]);
+                $user = new User();
+                $user->login = $credentials['login'];
+                $user->email = $ldapUser->getFirstAttribute('mail');
+                $user->name = $ldapUser->getFirstAttribute('cn');
+                $user->password = Hash::make($credentials['password']);
+                $user->save();
 
                 $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -58,16 +61,12 @@ class AuthController extends Controller
 
     private function attemptLdapAuthentication($username, $password)
     {
-        try {
-            $connection = Container::getConnection('default');
+        $connection = Container::getConnection('default');
 
-            $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('uid', $username);
+        $ldapUser = \LdapRecord\Models\openLDAP\User::findBy('uid', $username);
 
-            if ($ldapUser && $connection->auth()->attempt($ldapUser->getDn(), $password)) {
-                return $ldapUser;
-            }
-        } catch (\Exception $e) {
-            return null;
+        if ($ldapUser && $connection->auth()->attempt($ldapUser->getDn(), $password)) {
+            return $ldapUser;
         }
 
         return null;

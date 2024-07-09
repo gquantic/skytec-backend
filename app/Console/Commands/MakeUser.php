@@ -45,10 +45,10 @@ class MakeUser extends Command
     protected function createNewUser(): void
     {
         $this->createAdmin(
-                $this->argument('name') ?? $this->ask('What is your name?', 'admin'),
-                $this->argument('login') ?? $this->ask('Login', 'admin'),
-                $this->argument('email') ?? $this->ask('What is your email?', 'admin@admin.com'),
-                $this->argument('password') ?? $this->secret('What is the password?')
+                $this->argument('name') ?? $this->ask('Ваше им:?', 'admin'),
+                $this->argument('login') ?? $this->ask('Логин:', 'admin'),
+                $this->argument('email') ?? $this->ask('Электронная почта:', 'admin@admin.com'),
+                $this->argument('password') ?? $this->secret('Пароль:')
             );
 
         $this->info('User created successfully.');
