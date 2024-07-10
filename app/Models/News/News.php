@@ -18,7 +18,7 @@ class News extends Model
 
     protected $hidden = ['reactions'];
 
-    protected $appends = ['views_count', 'users_reactions'];
+    protected $appends = ['views_count', 'users_reactions', 'user_reaction'];
 
     protected $table = 'news';
 
@@ -46,6 +46,13 @@ class News extends Model
     public function reactions(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(NewsReaction::class, 'news_id', 'id');
+    }
+
+    public function getUserReactionAttribute(): int
+    {
+        if ($reaction = $this->reactions()->where('user_id', auth()->id())->first()) {
+            return $reaction->emoji_id;
+        } else return 0;
     }
 
     public function getUsersReactionsAttribute()

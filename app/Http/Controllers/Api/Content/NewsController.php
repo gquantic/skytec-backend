@@ -80,6 +80,14 @@ class NewsController extends Controller
             'emoji_id' => 'required|exists:emoji,id',
         ]);
 
+        $alreadyReacted = NewsReaction::query()->where('user_id', Auth::id());
+
+        // Удаляем старые реакции на эту новость
+        NewsReaction::query()
+            ->where('user_id', Auth::id())
+            ->where('news_id', $data['news_id'])
+            ->delete();
+
         NewsReaction::query()->create([
             'news_id' => $request->post('news_id'),
             'user_id' => Auth::id(),
