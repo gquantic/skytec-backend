@@ -4,6 +4,7 @@ namespace App\Console\Commands\ldap;
 
 use Illuminate\Console\Command;
 use LdapRecord\Container;
+use LdapRecord\Models\openLDAP\User;
 
 class GetAllUsersCommand extends Command
 {
@@ -27,6 +28,6 @@ class GetAllUsersCommand extends Command
     public function handle()
     {
         $connection = Container::getConnection('default');
-        dd($connection->query()->where('cn', '=', '*')->get());
+        dd(User::all());
     }
 }
