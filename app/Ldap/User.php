@@ -15,4 +15,19 @@ class User extends Model
         'organizationalPerson',
         'user',
     ];
+
+    /**
+     * The attributes that should be cast to native types.
+     */
+    protected array $casts = [
+        'objectguid' => 'string',
+    ];
+
+    /**
+     * Find a user by their username.
+     */
+    public static function findByUsername($username)
+    {
+        return static::findBy('uid', $username);
+    }
 }
