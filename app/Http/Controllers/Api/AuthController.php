@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\User\UserLoginRequest;
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Repositories\DepartmentRepository;
 use App\Services\ApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -15,9 +16,13 @@ use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 class AuthController extends Controller
 {
     protected UserRepository $userRepository;
-    public function __construct(UserRepository $userRepository)
+    protected DepartmentRepository $departmentRepository;
+
+
+    public function __construct(UserRepository $userRepository, DepartmentRepository $departmentRepository)
     {
         $this->userRepository = $userRepository;
+        $this->departmentRepository = $departmentRepository;
     }
 
     public function login(UserLoginRequest $request)
@@ -46,17 +51,24 @@ class AuthController extends Controller
                 $fullName = $ldapUser->getFirstAttribute('cn');
                 $explodedName = explode(' ', $fullName);
 
-                // Создаем нового пользователя в локальной базе данных
-                $user = $this->userRepository->createUser(data: [
+//                $ldapUser->getFirstAttribute('title');
+
+                $data = [
                     'login' => $credentials['login'],
                     'email' => $ldapUser->getFirstAttribute('mail'),
                     'name' => $ldapUser->getFirstAttribute('cn'),
                     'firstname' => $explodedName[0] ?? '',
                     'lastname' => $explodedName[1] ?? '',
                     'surname' => $explodedName[2] ?? '',
-                    'phone' => $ldapUser->getFirstAttribute('telephonenumber'),
+                    'phone' => $ldapUser->getFirstAttribute('phone'),
                     'password' => Hash::make($credentials['password']),
-                ]);
+                    'position' => $ldapUser->getFirstAttribute('title'),
+                    'department_id' => $this->departmentRepository->firstOrCreate(['title' => $ldapUser->getFirstAttribute('department')], [])->id
+                ];
+
+
+                // Создаем нового пользователя в локальной базе данных
+                $user = $this->userRepository->createUser(data: $data);
 
                 $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -75,14 +87,12 @@ class AuthController extends Controller
         $connection = Container::getConnection('default');
 
         $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('sAMAccountName', $username);
-        
-        dd($ldapUser->getFirstAttribute('title'));
 
         if ($ldapUser && $connection->auth()->attempt($ldapUser->getDn(), $password)) {
             return $ldapUser;
         }
 
-        return null;
+        return $ldapUser;
     }
 
 
