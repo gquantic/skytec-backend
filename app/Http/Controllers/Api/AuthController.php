@@ -74,7 +74,9 @@ class AuthController extends Controller
     {
         $connection = Container::getConnection('default');
 
-        $ldapUser = \LdapRecord\Models\OpenLDAP\User::findBy('uid', $username);
+        $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('sAMAccountName', $username);
+        
+        dd($ldapUser->getFirstAttribute('title'));
 
         if ($ldapUser && $connection->auth()->attempt($ldapUser->getDn(), $password)) {
             return $ldapUser;
