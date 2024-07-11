@@ -10,7 +10,7 @@ use App\Services\ApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use LdapRecord\Container;
-use LdapRecord\Models\openLDAP\User as LdapUser;
+use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 
 class AuthController extends Controller
 {
@@ -74,7 +74,7 @@ class AuthController extends Controller
     {
         $connection = Container::getConnection('default');
 
-        $ldapUser = \LdapRecord\Models\openLDAP\User::findBy('uid', $username);
+        $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('uid', $username);
 
         if ($ldapUser && $connection->auth()->attempt($ldapUser->getDn(), $password)) {
             return $ldapUser;

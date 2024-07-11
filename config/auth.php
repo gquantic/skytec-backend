@@ -64,7 +64,7 @@ return [
 
         'users' => [
             'driver' => 'ldap',
-            'model' => LdapRecord\Models\openLDAP\User::class,
+            'model' => LdapRecord\Models\ActiveDirectory\User::class,
             'rules' => [],
             'scopes' => [],
             'database' => [
