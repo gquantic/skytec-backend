@@ -28,13 +28,12 @@ class UserController extends Controller
 
         try {
             $user = $request->user();
-            $user->firstname = $data['firstname'] ?? $user->firstname;
-            $user->lastname = $data['lastname'] ?? $user->lastname;
-            $user->surname = $data['surname'] ?? $user->surname;
-            $user->phone = $data['phone'] ?? $user->phone;
-            $user->email = $data['email'] ?? $user->email;
-            $user->hide_phone = boolval($data['hide_phone']) ?? $user->hide_phone;
+            foreach ($data as $key => $value) {
+                $user->$key = $value;
+            }
             $user->save();
+
+            return $user;
         } catch (\Exception $exception) {
             throw new ApiException($exception->getMessage());
         }
