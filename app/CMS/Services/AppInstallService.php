@@ -2,6 +2,7 @@
 
 namespace App\CMS\Services;
 
+use App\Models\Article\ArticleCategory;
 use App\Models\News\News;
 use App\Models\News\NewsCategory;
 use Illuminate\Support\Facades\Artisan;
@@ -12,6 +13,8 @@ class AppInstallService
     {
         $this->makeNewsCategories();
         $this->makeFirstNews();
+
+        $this->makeArticleCategories();
 
         Artisan::call('emojis:update');
         Artisan::call('config:base');
@@ -26,6 +29,24 @@ class AppInstallService
             ],
             [
                 'title' => 'Новости SKY'
+            ],
+        ]);
+    }
+
+    private function makeArticleCategories()
+    {
+        ArticleCategory::query()->insert([
+            [
+                'title' => 'Маркетинг'
+            ],
+            [
+                'title' => 'Реклама'
+            ],
+            [
+                'title' => 'Креатив'
+            ],
+            [
+                'title' => 'Продвижение'
             ],
         ]);
     }

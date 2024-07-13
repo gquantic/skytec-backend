@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id');
             $table->foreignId('education_id');
             $table->string('date', 255);
+            $table->longText('comment')->nullable();
             $table->string('status')->default(\Illuminate\Support\Arr::first(config('statuses.applications')));
             $table->timestamps();
         });
