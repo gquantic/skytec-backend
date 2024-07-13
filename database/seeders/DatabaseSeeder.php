@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         Department::factory()->count(5)->create();
 
-        User::factory()->count(80)->create();
+//        User::factory()->count(80)->create();
 
         Education::factory()->count(10)->create();
 
@@ -44,12 +44,12 @@ class DatabaseSeeder extends Seeder
             'remember_token' => Str::random(10),
         ]);
 
-        NewsCategory::factory()->count(100)->create();
+//        NewsCategory::factory()->count(100)->create();
 
-        News::factory()->count(100)->create();
+//        News::factory()->count(100)->create();
 
-        ArticleCategory::factory()->count(10)->create();
-        Article::factory()->count(200)->create();
+//        ArticleCategory::factory()->count(10)->create();
+//        Article::factory()->count(200)->create();
 
         foreach (User::query()->offset(5)->limit(1000)->get() as $user) {
             $user->manager_id = rand(1,5);
