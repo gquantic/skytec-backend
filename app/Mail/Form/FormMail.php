@@ -23,9 +23,8 @@ class FormMail extends Mailable
     /**
      * Create a new message instance.
      */
-    public function __construct(AxoRequest $axoRequest, $title = 'Форма с сайта', array $data = [])
+    public function __construct($title = 'Форма с сайта', array $data = [])
     {
-        $this->axoRequest = $axoRequest;
         $this->title = $title;
         $this->data = $data;
     }
@@ -48,7 +47,6 @@ class FormMail extends Mailable
         return new Content(
             view: 'mail.form',
             with: [
-                'axoRequest' => $this->axoRequest,
                 'title' => $this->title,
                 'data' => $this->data,
             ],
