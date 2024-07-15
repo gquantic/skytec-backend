@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\Form\FormMail;
 use App\Models\Requests\AxoRequest;
 use App\Services\ApiService;
+use App\Services\MailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -36,8 +37,11 @@ class AxoRequestController extends Controller
         $axoRequest->fill($data);
         $axoRequest->save();
 
-        Mail::to(app_config()->get('axo_mail', 'gapurovichi@yandex.ru', 'gapurovichi@yandex.ru'))
-            ->send(new FormMail($axoRequest));
+        $mail = MailService::sendForm('axo_request', 'AXO заявка', data: [
+            'Расположение:' => $data['location'],
+            'Запрос::' => $data['request'],
+        ]);
+        dd($mail);
 
         return ApiService::jsonResponse('Заявка успешно создана.');
     }

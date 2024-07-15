@@ -11,6 +11,8 @@ Route::prefix('user')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::post('invite-friend', 'App\Http\Controllers\Api\InviteFriendController@store');
+
     Route::get('emojis', 'App\Http\Controllers\Api\EmojiController@getEmojis');
 
     Route::post('business-idea', 'App\Http\Controllers\Api\BusinessIdeaController@store');
