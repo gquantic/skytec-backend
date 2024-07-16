@@ -38,10 +38,9 @@ class AxoRequestController extends Controller
         $axoRequest->save();
 
         $mail = MailService::sendForm('axo_request', 'AXO заявка', data: [
-            'Расположение:' => $data['location'],
-            'Запрос::' => $data['request'],
+            'Расположение' => $data['location'],
+            'Запрос' => $data['request'],
         ]);
-        dd($mail);
 
         return ApiService::jsonResponse('Заявка успешно создана.');
     }

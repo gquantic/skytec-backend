@@ -7,9 +7,9 @@ use Illuminate\Support\Facades\Mail;
 
 class MailService
 {
-    public static function sendForm(string $formType, string $formTitle = 'Форма с сайта', array $data)
+    public static function sendForm(string $formType, string $formTitle = 'Форма с сайта', array $data, array $files = [])
     {
-        return Mail::to(self::getMailAddresses($formType))->send(new FormMail(title: $formTitle, data: $data));
+        return Mail::to(self::getMailAddresses($formType))->send(new FormMail(title: $formTitle, data: $data, files: $files));
     }
 
     private static function getMailAddresses(string $formType)

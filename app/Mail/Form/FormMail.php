@@ -6,6 +6,7 @@ use App\Models\Requests\AxoRequest;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -20,13 +21,16 @@ class FormMail extends Mailable
 
     protected array $data;
 
+    protected array $files;
+
     /**
      * Create a new message instance.
      */
-    public function __construct($title = 'Форма с сайта', array $data = [])
+    public function __construct($title = 'Форма с сайта', array $data = [], array $files = [])
     {
         $this->title = $title;
         $this->data = $data;
+        $this->files = $files;
     }
 
     /**
@@ -56,10 +60,18 @@ class FormMail extends Mailable
     /**
      * Get the attachments for the message.
      *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
+     * @return array<int, Attachment>
      */
     public function attachments(): array
     {
-        return [];
+        $attachments = [];
+
+        foreach ($this->files as $file) {
+            $attachments[] = Attachment::fromPath($file->getRealPath())
+                ->as($file->getClientOriginalName())
+                ->withMime($file->getMimeType());
+        }
+
+        return $attachments;
     }
 }
