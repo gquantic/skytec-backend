@@ -26,6 +26,7 @@ return [
         'optiweb.krd@yandex.ru',
         'gapurovichi@yandex.ru',
         'info@aadev.ru',
+        'Josquinwork@mail.ru',
     ],
 
     /*
