@@ -23,6 +23,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user/search', 'App\Http\Controllers\Api\SearchController@searchUser');
     Route::get('/user/{id}', 'App\Http\Controllers\Api\User\UserController@show');
 
+    Route::get('departments', 'App\Http\Controllers\Api\DepartmentController@getDepartments');
+
     Route::prefix('birthdays')->group(function () {
         Route::get('/', 'App\Http\Controllers\Api\User\UserBirthdayController@index');
         Route::get('/today', 'App\Http\Controllers\Api\User\UserBirthdayController@today');

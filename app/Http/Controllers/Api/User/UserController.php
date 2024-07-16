@@ -33,7 +33,6 @@ class UserController extends Controller
                 $user->$key = $value;
             }
             $user->save();
-
             return $user;
         } catch (\Exception $exception) {
             throw new ApiException($exception->getMessage());
