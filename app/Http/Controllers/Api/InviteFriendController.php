@@ -9,6 +9,6 @@ class InviteFriendController extends Controller
 {
     public function store(Request $request)
     {
-        return $request->allFiles();
+        return $request->file('pin');
     }
 }
