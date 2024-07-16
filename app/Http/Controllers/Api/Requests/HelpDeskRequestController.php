@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Requests\AxoRequest;
 use App\Models\Requests\HelpDeskRequest;
 use App\Services\ApiService;
+use App\Services\MailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -34,6 +35,11 @@ class HelpDeskRequestController extends Controller
         $helpDeskRequest = new HelpDeskRequest();
         $helpDeskRequest->fill($data);
         $helpDeskRequest->save();
+
+        $mail = MailService::sendForm('help_desc_mail', 'Help Desk заявка', data: [
+            'Расположение' => $data['location'],
+            'Запрос' => $data['request'],
+        ]);
 
         return ApiService::jsonResponse('Заявка успешно создана.');
     }
