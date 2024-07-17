@@ -14,6 +14,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/documents', 'App\Http\Controllers\Api\DocumentController@index');
 
     Route::post('invite-friend', 'App\Http\Controllers\Api\InviteFriendController@store');
+    Route::post('user-create', 'App\Http\Controllers\Api\InviteFriendController@createRequest');
 
     Route::get('emojis', 'App\Http\Controllers\Api\EmojiController@getEmojis');
 
@@ -21,7 +22,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::put('/user', 'App\Http\Controllers\Api\User\UserController@update');
     Route::post('/user/avatar', 'App\Http\Controllers\Api\UpdateAvatarController@update');
-//    Route::post('/user', 'App\Http\Controllers\Api\AuthController@register');
     Route::get('/user/search', 'App\Http\Controllers\Api\SearchController@searchUser');
     Route::get('/user/{id}', 'App\Http\Controllers\Api\User\UserController@show');
 

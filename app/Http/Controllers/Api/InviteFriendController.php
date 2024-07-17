@@ -16,4 +16,13 @@ class InviteFriendController extends Controller
             files: $request->allFiles(),
         );
     }
+
+    public function createRequest(Request $request)
+    {
+        $mail = MailService::sendForm('axo_request',
+            'Создать учетную запись для сотрудника',
+            $request->collect('data')->toArray(),
+            files: $request->allFiles(),
+        );
+    }
 }
