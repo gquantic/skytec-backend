@@ -6,3 +6,29 @@
         color: #000;
     }
 }
+
+.page-platform-login {
+    .m-4.text-center.text-muted,
+    .small.text-center.mb-1.px-5,
+    .nav.justify-content-center.mb-5 {
+        display: none;
+    }
+}
+
+.media-item {
+    margin-right: 5px;
+    transition: .2s ease;
+    outline: 2px dashed rgba(0,0,0,0);
+    outline-offset: 0;
+
+    &:hover {
+        outline: 2px solid;
+        outline-offset: 3px;
+    }
+
+    .text-ellipsis {
+        position: relative;
+        z-index: 999;
+        margin-top: 35px;
+    }
+}

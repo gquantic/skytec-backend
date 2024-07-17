@@ -35,6 +35,15 @@ use Tabuna\Breadcrumbs\Trail;
 Route::screen('/main', PlatformScreen::class)
     ->name('platform.main');
 
+Route::screen('/documents', \App\Orchid\Screens\Document\DocumentListScreen::class)
+    ->name('platform.documents.list');
+
+Route::screen('/documents/create', \App\Orchid\Screens\Document\DocumentCreateScreen::class)
+    ->name('platform.documents.create');
+
+Route::screen('/documents/edit/{document}', \App\Orchid\Screens\Document\DocumentEditScreen::class)
+    ->name('platform.documents.edit');
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
