@@ -56,9 +56,18 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.systems.configs')
                 ->permission('platform.systems.users')
                 ->title(__('Сайт')),
+
             Menu::make(__('Документы'))
                 ->icon('bs.ui-checks-grid')
                 ->route('platform.documents.list'),
+
+            Menu::make(__('Статьи'))
+                ->icon('bs.ui-checks-grid')
+                ->route('platform.articles.list'),
+
+            Menu::make(__('Новости'))
+                ->icon('bs.ui-checks-grid')
+                ->route('platform.news.list'),
 
             Menu::make('Документация')
                 ->title('Разработчикам')

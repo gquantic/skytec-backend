@@ -16,6 +16,8 @@ class News extends Model
     protected $casts = [
     ];
 
+    protected $guarded = [];
+
     protected $hidden = ['reactions'];
 
     protected $appends = ['views_count', 'users_reactions', 'user_reaction'];

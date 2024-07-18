@@ -12,7 +12,6 @@ class NewsCategoryFactory extends Factory
         $title = $this->faker->country() . ' ' . $this->faker->city() . ' ' . $this->faker->colorName();
 
         return [
-            'slug' => Str::slug($title),
             'title' => $title,
             'description' => $this->faker->text(),
         ];

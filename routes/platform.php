@@ -44,6 +44,24 @@ Route::screen('/documents/create', \App\Orchid\Screens\Document\DocumentCreateSc
 Route::screen('/documents/edit/{document}', \App\Orchid\Screens\Document\DocumentEditScreen::class)
     ->name('platform.documents.edit');
 
+Route::screen('/articles', \App\Orchid\Screens\Article\ArticleListScreen::class)
+    ->name('platform.articles.list');
+
+Route::screen('/articles/edit/{article}', \App\Orchid\Screens\Article\ArticleEditScreen::class)
+    ->name('platform.articles.edit');
+
+Route::screen('/articles/create', \App\Orchid\Screens\Article\ArticleCreateScreen::class)
+    ->name('platform.articles.create');
+
+Route::screen('/news', \App\Orchid\Screens\News\NewsListScreen::class)
+    ->name('platform.news.list');
+
+Route::screen('/news/create', \App\Orchid\Screens\News\NewsCreateScreen::class)
+    ->name('platform.news.create');
+
+Route::screen('/news/{news}/edit', \App\Orchid\Screens\News\NewsEditScreen::class)
+    ->name('platform.news.edit');
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
