@@ -39,6 +39,7 @@ class AuthController extends Controller
                 return ApiService::jsonResponse([
                     'user' => $this->userRepository->getUserData($user->id),
                     'token' => $token,
+                    'permissions' => $user->permissions,
                 ], 200);
             } else {
                 return ApiService::jsonResponse('Неверный пароль.', 403);

@@ -73,7 +73,7 @@ class User extends Authenticatable implements LdapAuthenticatable
         'created_at',
     ];
 
-//    protected $appends = ['name'];
+//    protected $appends = ['access'];
 
     /**
      * Get the user's full name.
