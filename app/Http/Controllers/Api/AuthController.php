@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use LdapRecord\Container;
 use LdapRecord\Models\ActiveDirectory\User as LdapUser;
+use Illuminate\Support\Facades\Storage;
 
 class AuthController extends Controller
 {
@@ -30,9 +31,7 @@ class AuthController extends Controller
         $credentials = $request->only('login', 'password');
 
         // Проверяем наличие пользователя в локальной базе данных
-        $user = User::query()->where('login', $credentials['login'])->first();
-
-        if ($user) {
+        if ($user = User::query()->where('login', $credentials['login'])->first()) {
             // Проверяем пароль в локальной базе данных
             if (Hash::check($credentials['password'], $user->password)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
@@ -49,34 +48,34 @@ class AuthController extends Controller
             $ldapUser = $this->attemptLdapAuthentication($credentials['login'], $credentials['password']);
 
             if ($ldapUser) {
-                $fullName = $ldapUser->getFirstAttribute('cn');
-                $explodedName = explode(' ', $fullName);
+//                $fullName = $ldapUser->getFirstAttribute('cn');
+//                $explodedName = explode(' ', $fullName);
 
-//                $ldapUser->getFirstAttribute('title');
+//                $data = [
+//                    'avatar' => $this->pasteImage($ldapUser->getFirstAttribute('thumbnailphoto')),
+//                    'login' => $credentials['login'],
+//                    'email' => $ldapUser->getFirstAttribute('mail'),
+//                    'name' => $ldapUser->getFirstAttribute('cn'),
+//                    'firstname' => $explodedName[0] ?? '',
+//                    'lastname' => $explodedName[1] ?? '',
+//                    'surname' => $explodedName[2] ?? '',
+//                    'phone' => $ldapUser->getFirstAttribute('phone'),
+//                    'password' => Hash::make($credentials['password']),
+//                    'position' => $ldapUser->getFirstAttribute('title'),
+//                    'department_id' => $this->departmentRepository->firstOrCreate(['title' => $ldapUser->getFirstAttribute('department')], [])->id
+//                ];
 
-                $data = [
-                    'login' => $credentials['login'],
-                    'email' => $ldapUser->getFirstAttribute('mail'),
-                    'name' => $ldapUser->getFirstAttribute('cn'),
-                    'firstname' => $explodedName[0] ?? '',
-                    'lastname' => $explodedName[1] ?? '',
-                    'surname' => $explodedName[2] ?? '',
-                    'phone' => $ldapUser->getFirstAttribute('phone'),
-                    'password' => Hash::make($credentials['password']),
-                    'position' => $ldapUser->getFirstAttribute('title'),
-                    'department_id' => $this->departmentRepository->firstOrCreate(['title' => $ldapUser->getFirstAttribute('department')], [])->id
-                ];
+//              Создаем нового пользователя в локальной базе данных
+//                $user = $this->userRepository->createUser(data: $data);
 
+                if ($user = User::query()->where('email', $ldapUser->getFirstAttribute('mail'))->orWhere('login', $ldapUser->getFirstAttribute('sAMAccountName'))->first()) {
+                    $token = $user->createToken('auth_token')->plainTextToken;
 
-                // Создаем нового пользователя в локальной базе данных
-                $user = $this->userRepository->createUser(data: $data);
-
-                $token = $user->createToken('auth_token')->plainTextToken;
-
-                return ApiService::jsonResponse([
-                    'user' => $this->userRepository->getUserData($user->id),
-                    'token' => $token,
-                ], 200);
+                    return ApiService::jsonResponse([
+                        'user' => $this->userRepository->getUserData($user->id),
+                        'token' => $token,
+                    ], 200);
+                }
             }
 
             return ApiService::jsonResponse('Пользователь с таким логином не найден.', 404);
@@ -88,6 +87,10 @@ class AuthController extends Controller
         $connection = Container::getConnection('default');
 
         $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('sAMAccountName', $username);
+
+        if (!$ldapUser) {
+            $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('mail', $username);
+        }
 
         if ($ldapUser && $connection->auth()->attempt($ldapUser->getDn(), $password)) {
             return $ldapUser;
@@ -143,5 +146,38 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $user->createToken('auth_token')->accessToken->token,
         ], 200);
+    }
+
+    private function pasteImage($byteArray)
+    {
+        // Преобразование строки в байтовый массив
+        $imageData = pack('H*', bin2hex($byteArray));
+
+        // Декодирование изображения (например, если это изображение в формате PNG)
+        $image = imagecreatefromstring($imageData);
+
+        if ($image === false) {
+            throw new Exception('Не удалось создать изображение из байтового массива.');
+        }
+
+        // Установка сохранения альфа-канала (прозрачности)
+        imagesavealpha($image, true);
+
+        // Создание прозрачного фона
+        $transparent = imagecolorallocatealpha($image, 0, 0, 0, 127);
+        imagefill($image, 0, 0, $transparent);
+
+        // Сохранение изображения в файл PNG
+        $filename = time() . '_' . rand(999, 99999) . '_' . '.png';
+        $path = storage_path('app/public/' . $filename);
+        imagepng($image, $path);
+
+        // Освобождение памяти
+        imagedestroy($image);
+
+        // Использование хранилища Laravel для сохранения файла
+        Storage::put('public/users/avatars/' . $filename, file_get_contents($path));
+
+        return Storage::disk('public')->url('/users/avatars/' . $filename);
     }
 }
