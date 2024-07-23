@@ -15,4 +15,9 @@ class Department extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function head(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'head_id');
+    }
 }

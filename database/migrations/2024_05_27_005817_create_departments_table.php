@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('departments', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('head_id')->nullable()->constrained('users');
             $table->string('title');
             $table->longText('description')->nullable();
             $table->timestamps();

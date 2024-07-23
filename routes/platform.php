@@ -62,6 +62,15 @@ Route::screen('/news/create', \App\Orchid\Screens\News\NewsCreateScreen::class)
 Route::screen('/news/{news}/edit', \App\Orchid\Screens\News\NewsEditScreen::class)
     ->name('platform.news.edit');
 
+Route::screen('/departments', \App\Orchid\Screens\Department\DepartmentListScreen::class)
+    ->name('platform.departments.list');
+
+Route::screen('/departments/create', \App\Orchid\Screens\News\NewsCreateScreen::class)
+    ->name('platform.departments.create');
+
+Route::screen('/departments/{department}/edit', \App\Orchid\Screens\Department\DepartmentEditScreen::class)
+    ->name('platform.departments.edit');
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
@@ -71,7 +80,7 @@ Route::screen('profile', UserProfileScreen::class)
 
 // Platform > System > Users > User
 Route::screen('users/{user}/edit', UserEditScreen::class)
-    ->name('platform.systems.users.edit')
+        ->name('platform.systems.users.edit')
     ->breadcrumbs(fn (Trail $trail, $user) => $trail
         ->parent('platform.systems.users')
         ->push($user->login, route('platform.systems.users.edit', $user)));
