@@ -13,17 +13,14 @@ class UpdateAvatarController extends Controller
     public function update(Request $request)
     {
         $file = $request->file('avatar');
-        $fileName = Carbon::now()->timestamp . '.' . $file->extension();
+//        return $file->getClientOriginalName();;
+        $fileName = Carbon::now()->timestamp . '_' . $file->getClientOriginalName();
+//
+        $file->move(storage_path('/app/public/avatars/'), $fileName);
+        $user = $request->user();
+        $user->avatar = Storage::disk('public')->url("avatars/{$fileName}");
+        $user->save();
 
-        if ($request->hasFile('avatar')) {
-           $file->storePubliclyAs('avatars', $fileName, [
-               'disk' => 'public'
-           ]);
-           $user = $request->user();
-           $user->avatar = Storage::disk('public')->url("avatars/{$fileName}");
-           $user->save();
-
-           return $user;
-        }
+        return $user;
     }
 }

@@ -101,7 +101,7 @@ class AuthController extends Controller
             return $ldapUser;
         }
 
-        return $ldapUser;
+        return null;
     }
 
 
