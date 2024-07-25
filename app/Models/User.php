@@ -85,6 +85,11 @@ class User extends Authenticatable implements LdapAuthenticatable
         return "{$this->lastname} {$this->firstname} {$this->surname}";
     }
 
+    public function getAvatarAttribute($value): string
+    {
+        return $value == '' || $value == null ? '/img/default_avatar.jpeg' : $value;
+    }
+
     public function getEmploymentDateAttribute($value): string
     {
         return Carbon::parse($value)->format('d.m.Y');

@@ -11,6 +11,8 @@ class Department extends Model
 
     protected $guarded = [];
 
+    protected $appends = ['department_head'];
+
     public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(User::class);
@@ -19,5 +21,10 @@ class Department extends Model
     public function head(): \Illuminate\Database\Eloquent\Relations\HasOne
     {
         return $this->hasOne(User::class, 'id', 'head_id');
+    }
+
+    public function getDepartmentHeadAttribute()
+    {
+        return $this->head;
     }
 }
