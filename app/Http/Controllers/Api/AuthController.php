@@ -33,7 +33,7 @@ class AuthController extends Controller
         $credentials['login'] = Str::lower($credentials['login']);
 
         // Проверяем наличие пользователя в локальной базе данных
-        if ($user = User::query()->where('login', $credentials['login'])->first()) {
+        if ($user = User::query()->where('login', $credentials['login'])->first() && config('app.debug') === 'production') {
             // Проверяем пароль в локальной базе данных
             if (Hash::check($credentials['password'], $user->password)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
