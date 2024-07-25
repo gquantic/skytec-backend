@@ -3,6 +3,7 @@
 namespace App\Console\Commands\ldap;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Str;
 use LdapRecord\Container;
 use LdapRecord\Models\openLDAP\User;
 use Illuminate\Support\Facades\Hash;
@@ -55,9 +56,9 @@ class GetAllUsersCommand extends Command
             #}
 
             $data = [
-                'login' => $ldapUser->getFirstAttribute('sAMAccountName'),
+                'login' => Str::lower($ldapUser->getFirstAttribute('sAMAccountName')),
                 'avatar' => $ldapUser->getFirstAttribute('thumbnailphoto') != '' ? $this->pasteImage($ldapUser->getFirstAttribute('thumbnailphoto')) : '',
-                'email' => $ldapUser->getFirstAttribute('mail'),
+                'email' => Str::lower($ldapUser->getFirstAttribute('mail')),
                 'name' => $ldapUser->getFirstAttribute('cn'),
                 'firstname' => $explodedName[0] ?? '',
                 'lastname' => $explodedName[1] ?? '',

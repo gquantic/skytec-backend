@@ -73,7 +73,7 @@ class DepartmentListScreen extends Screen
                 TD::make('department.edit', '')
                     ->render(function (Department $department) {
                         return Link::make('Редактировать')
-                            ->target('_blank')
+//                            ->target('_blank')
                             ->route('platform.departments.edit', $department->id);
                     }),
             ])

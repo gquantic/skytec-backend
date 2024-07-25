@@ -10,6 +10,7 @@ use App\Repositories\DepartmentRepository;
 use App\Services\ApiService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use LdapRecord\Container;
 use LdapRecord\Models\ActiveDirectory\User as LdapUser;
 use Illuminate\Support\Facades\Storage;
@@ -29,6 +30,7 @@ class AuthController extends Controller
     public function login(UserLoginRequest $request)
     {
         $credentials = $request->only('login', 'password');
+        $credentials['login'] = Str::lower($credentials['login']);
 
         // Проверяем наличие пользователя в локальной базе данных
         if ($user = User::query()->where('login', $credentials['login'])->first()) {

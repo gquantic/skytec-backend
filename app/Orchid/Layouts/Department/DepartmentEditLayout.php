@@ -37,7 +37,8 @@ class DepartmentEditLayout extends Rows
             Select::make('department.head_id')
                 ->fromQuery(\App\Models\User::query(), 'name', 'id'),
 
-            Button::make('Сохранить'),
+            Button::make('Сохранить')
+                ->method('save'),
         ];
     }
 }

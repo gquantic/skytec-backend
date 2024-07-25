@@ -6,8 +6,10 @@ use App\Models\Department;
 use App\Models\User;
 use App\Orchid\Layouts\Department\DepartmentEditLayout;
 use App\Orchid\Layouts\Department\DepartmentMoreLayout;
+use Illuminate\Http\Request;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Layout;
+use Orchid\Support\Facades\Toast;
 
 class DepartmentEditScreen extends Screen
 {
@@ -62,6 +64,15 @@ class DepartmentEditScreen extends Screen
 
     public function unlinkUser(User $user)
     {
-        dd($user);
+        $user->department_id = null;
+        $user->save();
+    }
+
+    public function save(Department $department, Request $request)
+    {
+        $department->update(
+            $request->collect('department')->toArray()
+        );
+        Toast::info('Отдел обновлен.');
     }
 }
