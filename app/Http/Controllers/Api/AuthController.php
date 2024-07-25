@@ -33,7 +33,10 @@ class AuthController extends Controller
         $credentials['login'] = Str::lower($credentials['login']);
 
         // Проверяем наличие пользователя в локальной базе данных
-        if ($user = User::query()->where('login', $credentials['login'])->first() && config('app.debug') === 'production') {
+        if (
+            false
+            // TODO: доработать - $user = User::query()->where('login', $credentials['login'])->first() && config('app.debug') === 'production'
+        ) {
             // Проверяем пароль в локальной базе данных
             if (Hash::check($credentials['password'], $user->password)) {
                 $token = $user->createToken('auth_token')->plainTextToken;
@@ -68,7 +71,7 @@ class AuthController extends Controller
 //                ];
 
 //              Создаем нового пользователя в локальной базе данных
-//                $user = $this->userRepository->createUser(data: $data);
+                //$user = $this->userRepository->createUser(data: $data);
 
                 if ($user = User::query()->where('email', $ldapUser->getFirstAttribute('mail'))->orWhere('login', $ldapUser->getFirstAttribute('sAMAccountName'))->first()) {
                     $token = $user->createToken('auth_token')->plainTextToken;
