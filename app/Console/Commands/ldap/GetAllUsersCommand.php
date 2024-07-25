@@ -50,9 +50,9 @@ class GetAllUsersCommand extends Command
 
 //            dd($ldapUser->getFirstAttribute('sAMAccountName'));
 
-            if ($ldapUser->getFirstAttribute('mail') == '' || $ldapUser->getFirstAttribute('sAMAccountName') == '') {
-                continue;
-            }
+           # if ($ldapUser->getFirstAttribute('mail') == '' || $ldapUser->getFirstAttribute('sAMAccountName') == '' || $ldapUser->getFirstAttribute('department') == '') {
+            #    continue;
+            #}
 
             $data = [
                 'login' => $ldapUser->getFirstAttribute('sAMAccountName'),
