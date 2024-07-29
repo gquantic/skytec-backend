@@ -13,7 +13,7 @@ Route::prefix('user')->group(function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/documents', 'App\Http\Controllers\Api\DocumentController@index');
     Route::get('/pages', 'App\Http\Controllers\Api\Content\PageController@index');
-    Route::get('/pages/{page}', 'App\Http\Controllers\Api\Content\PageController@show');
+    Route::get('/pages/{page:uri}', 'App\Http\Controllers\Api\Content\PageController@show');
 
     Route::post('invite-friend', 'App\Http\Controllers\Api\InviteFriendController@store');
     Route::post('user-create', 'App\Http\Controllers\Api\InviteFriendController@createRequest');
