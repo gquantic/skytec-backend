@@ -7,6 +7,7 @@ use App\Http\Requests\Applications\EducationApplicationStoreRequest;
 use App\Models\Applications\EducationApplication;
 use App\Models\Education;
 use App\Services\ApiService;
+use App\Services\MailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -26,16 +27,23 @@ class EducationApplicationController extends Controller
     public function store(EducationApplicationStoreRequest $request)
     {
         try {
-            EducationApplication::query()->create(array_merge(
+            $education = EducationApplication::query()->create(array_merge(
                 $request->all(),
                 [
                     'user_id' => Auth::id()
                 ]
             ));
 
+            MailService::sendForm('education_mail', 'Заявка на обучение', [
+                'Ф.И.О. сотрудника' => $education->user->name,
+                'Обучение' => $education->education->title,
+                'Дата' => $education->date,
+                'Комментарий' => $education->comment,
+            ]);
+
             return ApiService::jsonResponse('Заявка на командировку успешна создана.', 200);
         } catch (\Exception $exception) {
-            return ApiService::jsonResponse('Неизвестная ошибка.', 500);
+            return ApiService::jsonResponse($exception->getMessage(), 500);
         }
     }
 

@@ -71,6 +71,15 @@ Route::screen('/departments/create', \App\Orchid\Screens\News\NewsCreateScreen::
 Route::screen('/departments/{department}/edit', \App\Orchid\Screens\Department\DepartmentEditScreen::class)
     ->name('platform.departments.edit');
 
+Route::screen('/pages', \App\Orchid\Screens\Page\PageListScreen::class)
+    ->name('platform.pages.list');
+
+Route::screen('/pages/create', \App\Orchid\Screens\Page\PageCreateScreen::class)
+    ->name('platform.pages.create');
+
+Route::screen('/pages/{page}/edit', \App\Orchid\Screens\Page\PageEditScreen::class)
+    ->name('platform.pages.edit');
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')

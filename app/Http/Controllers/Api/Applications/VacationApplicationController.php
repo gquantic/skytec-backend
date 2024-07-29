@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Applications\VacationApplicationStoreRequest;
 use App\Models\Applications\VacationApplication;
 use App\Services\ApiService;
+use App\Services\MailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -25,12 +26,21 @@ class VacationApplicationController extends Controller
     public function store(VacationApplicationStoreRequest $request)
     {
         try {
-            VacationApplication::query()->create(array_merge(
+            $vacation = VacationApplication::query()->create(array_merge(
                 $request->all(),
                 [
                     'user_id' => Auth::id()
                 ]
             ));
+
+            MailService::sendForm('vacation_mail', 'Заявка на отпуск', [
+                'Ф.И.О. сотрудника' => $vacation->user->name,
+                'Причина' => $vacation->reason,
+                'Тип отпуска' => $vacation->vacation_type,
+                'Начало' => $vacation->start_date,
+                'Конец' => $vacation->end_date,
+            ]);
+
 
             return ApiService::jsonResponse('Заявка на отпуск успешна создана.', 200);
         } catch (\Exception $exception) {

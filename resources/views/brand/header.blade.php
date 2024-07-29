@@ -1,5 +1,6 @@
 @vite([
-    'resources/scss/styles.scss'
+    'resources/scss/styles.scss',
+    'resources/js/app.js',
 ])
 
 <img src="/img/logo-white.png" alt="">
