@@ -80,18 +80,6 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make(__('Новости'))
                 ->icon('bs.ui-checks-grid')
                 ->route('platform.news.list'),
-
-            Menu::make('Документация')
-                ->title('Разработчикам')
-                ->icon('bs.box-arrow-up-right')
-                ->url('https://orchid.software/ru/docs')
-                ->target('_blank'),
-
-            Menu::make('Лог изменений')
-                ->icon('bs.box-arrow-up-right')
-                ->url('https://github.com/orchidsoftware/platform/blob/master/CHANGELOG.md')
-                ->target('_blank')
-                ->badge(fn () => Dashboard::version(), Color::DARK),
         ];
     }
 
