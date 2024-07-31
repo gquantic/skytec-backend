@@ -61,6 +61,10 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.pages.list')
                 ->title(__('Сайт')),
 
+            Menu::make(__('Ссылки в меню'))
+                ->icon('bs.ui-checks-grid')
+                ->route('platform.menu-items.list'),
+
             Menu::make(__('Настройки сайта'))
                 ->icon('bs.ui-checks-grid')
                 ->route('platform.systems.configs'),

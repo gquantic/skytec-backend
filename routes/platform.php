@@ -80,6 +80,15 @@ Route::screen('/pages/create', \App\Orchid\Screens\Page\PageCreateScreen::class)
 Route::screen('/pages/{page}/edit', \App\Orchid\Screens\Page\PageEditScreen::class)
     ->name('platform.pages.edit');
 
+Route::screen('/menu-items', \App\Orchid\Screens\MenuItem\MenuItemListScreen::class)
+    ->name('platform.menu-items.list');
+
+Route::screen('/menu-items/create', \App\Orchid\Screens\MenuItem\MenuItemCreateScreen::class)
+    ->name('platform.menu-items.create');
+
+Route::screen('/menu-items/{menuItem}/edit', \App\Orchid\Screens\MenuItem\MenuItemEditScreen::class)
+    ->name('platform.menu-items.edit');
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
