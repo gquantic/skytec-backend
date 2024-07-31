@@ -89,7 +89,7 @@ class PageCreateScreen extends Screen
         $center = $request->collect('page_center')->toArray() ?? [];
         $right = $request->collect('page_right')->toArray() ?? [];
         $page['active'] = false;
-        $page['uri'] = $page['uri'] ?? Str::slug($page['menu_title'] . ' ' . time());
+        $page['url'] = $page['url'] ?? Str::slug($page['menu_title'] . ' ' . time());
 
         $pageModel = new Page();
 
@@ -114,7 +114,7 @@ class PageCreateScreen extends Screen
         $center = $request->collect('page_center')->toArray() ?? [];
         $right = $request->collect('page_right')->toArray() ?? [];
         $page['active'] = true;
-        $page['uri'] = $page['uri'] ?? Str::slug($page['menu_title'] . ' ' . time());
+        $page['url'] = $page['url'] ?? Str::slug($page['menu_title'] . ' ' . time());
 
         $pageModel = new Page();
 

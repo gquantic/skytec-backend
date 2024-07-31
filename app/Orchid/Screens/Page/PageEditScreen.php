@@ -93,7 +93,7 @@ class PageEditScreen extends Screen
         $center = json_decode($blocks['center'], true) ?? [];
         $right = json_decode($blocks['right'], true) ?? [];
         $page['active'] = false;
-        $page['uri'] = $page['uri'] ?? Str::slug($page['menu_title'] . ' ' . time());
+        $page['url'] = $page['url'] ?? Str::slug($page['menu_title'] . ' ' . time());
 
         foreach ($page as $key => $value) {
             $pageModel->$key = $value;
@@ -118,7 +118,7 @@ class PageEditScreen extends Screen
         $center = json_decode($blocks['center'], true) ?? [];
         $right = json_decode($blocks['right'], true) ?? [];
         $page['active'] = true;
-        $page['uri'] = $page['uri'] ?? Str::slug($page['menu_title'] . ' ' . time());
+        $page['url'] = $page['url'] ?? Str::slug($page['menu_title'] . ' ' . time());
 
         foreach ($page as $key => $value) {
             $pageModel->$key = $value;

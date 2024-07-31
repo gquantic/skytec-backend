@@ -67,7 +67,7 @@ class MenuItemEditScreen extends Screen
         $data['sort_left'] = $data['sort_left'] ?? 0;
 
         if ($data['page_id'] != null) {
-            $data['url'] = Page::query()->findOrFail($data['page_id'])->uri;
+            $data['url'] = Page::query()->findOrFail($data['page_id'])->url;
         }
 
         $menuItem->update(

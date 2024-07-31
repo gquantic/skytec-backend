@@ -62,7 +62,7 @@ class PageListScreen extends Screen
         return [
             Layout::table('pages', [
                 TD::make('page.title', 'Ссылка')
-                    ->render(fn (Page $page) => $page->uri),
+                    ->render(fn (Page $page) => $page->url),
 
                 TD::make('page.menu_title', 'Название в меню')
                     ->render(fn (Page $page) => $page->menu_title),

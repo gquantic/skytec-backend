@@ -27,7 +27,7 @@ class PageCreateLayout extends Rows
     protected function fields(): iterable
     {
         return [
-            Input::make('page.uri')
+            Input::make('page.url')
                 ->title('Ссылка страницы в адресе')
                 ->help('Можно оставить поле пустым. По умолчанию транслитерация названия в меню'),
 

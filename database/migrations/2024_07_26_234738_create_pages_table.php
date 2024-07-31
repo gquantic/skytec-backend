@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pages', function (Blueprint $table) {
             $table->id();
             $table->foreignId('author_id')->nullable()->constrained('users');
-            $table->string('uri')->unique();
+            $table->string('url')->unique();
             $table->string('title');
             $table->string('menu_title');
             $table->longText('description')->nullable();
