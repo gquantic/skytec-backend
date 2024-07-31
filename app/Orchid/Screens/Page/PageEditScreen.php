@@ -84,12 +84,14 @@ class PageEditScreen extends Screen
         ];
     }
 
-    public function save(Page $pageModel, Request $request)
+    public function save(Page $page, Request $request)
     {
+        $pageModel = $page;
         $page = $request->collect('page')->toArray();
-        $left = $request->collect('page_left')->toArray() ?? [];
-        $center = $request->collect('page_center')->toArray() ?? [];
-        $right = $request->collect('page_right')->toArray() ?? [];
+        $blocks = $request->collect('blocks')->toArray();
+        $left = json_decode($blocks['left'], true) ?? [];
+        $center = json_decode($blocks['center'], true) ?? [];
+        $right = json_decode($blocks['right'], true) ?? [];
         $page['active'] = false;
         $page['uri'] = $page['uri'] ?? Str::slug($page['menu_title'] . ' ' . time());
 
@@ -111,9 +113,10 @@ class PageEditScreen extends Screen
     {
         $pageModel = $page;
         $page = $request->collect('page')->toArray();
-        $left = $request->collect('page_left')->toArray() ?? [];
-        $center = $request->collect('page_center')->toArray() ?? [];
-        $right = $request->collect('page_right')->toArray() ?? [];
+        $blocks = $request->collect('blocks')->toArray();
+        $left = json_decode($blocks['left'], true) ?? [];
+        $center = json_decode($blocks['center'], true) ?? [];
+        $right = json_decode($blocks['right'], true) ?? [];
         $page['active'] = true;
         $page['uri'] = $page['uri'] ?? Str::slug($page['menu_title'] . ' ' . time());
 

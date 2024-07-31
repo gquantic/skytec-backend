@@ -38,7 +38,7 @@ class ArticleController extends Controller
                 ]
             ));
 
-            return ApiService::jsonResponse($article, 200);
+            return ApiService::jsonResponse($article);
         } catch (BaseException $exception) {
             return ApiService::jsonResponse($exception->getMessage(), 500);
         }
@@ -72,6 +72,8 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article)
     {
-        //
+        $article->delete();
+
+        return ApiService::jsonResponse('Статья удалена.');
     }
 }

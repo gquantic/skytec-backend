@@ -1,14 +1,17 @@
 <template>
-    <div class="form-group border p-3 shadow mb-4" v-for="(block, index) in blocks">
+    <div class="form-group border p-3 shadow mb-4" v-for="(block, index) in blocks" :key="index">
         <label :for="'block-' + index" class="form-label">Выберите блок</label>
-        <select :id="'block-' + index" v-model="blocks[index]" :name="'page.' + position + '[]'" :key="index" class="form-control">
+        <select :id="'block-' + index" v-model="block.type" :name="'page.' + position + '[]'" class="form-control">
             <option value="null">Не показывать</option>
             <option :value="key" v-for="(type, key) in blockTypes" :key="key">
                 {{ type }}
             </option>
         </select>
-        <img v-if="element !== 'null'" :src="'/img/admin/forms/' + block + '.jpg'" style="width: 100%;" class="mt-3" alt="">
-        <button class="btn btn-default mt-3 float-end" type="button" @click="blocks.splice(index, 1)">Удалить блок</button>
+        <div v-if="block.type === 'text'" class="mt-2">
+            <textarea class="form-control" rows="5" v-model="block.content"></textarea>
+        </div>
+        <img v-if="block.type !== 'null' && block.type !== 'text'" :src="'/img/admin/forms/' + block.type + '.jpg'" style="width: 100%;" class="mt-3" alt="">
+        <button class="btn btn-default mt-3 float-end" type="button" @click="removeBlock(index)">Удалить блок</button>
     </div>
     <div class="form-group mb-0">
         <button class="btn btn-default" @click="addBlock" type="button">
@@ -19,6 +22,7 @@
             <span>Добавить блок</span>
         </button>
     </div>
+    <textarea :name="'blocks[' + position + ']'" hidden="hidden" v-html="JSON.stringify(blocks)" id="" cols="30" rows="10"></textarea>
 </template>
 
 <script lang="ts">
@@ -33,14 +37,13 @@ export default {
             default: 'center'
         },
         defaultBlocks: {
-            default: {},
+            default: () => ([]),
         }
     },
     data() {
         return {
             blocks: [],
-            blockTypes: {
-            },
+            blockTypes: {},
         }
     },
     mounted() {
@@ -50,22 +53,32 @@ export default {
                 download: 'Загрузка',
                 request: 'Заявка',
                 fastNavigation: 'Быстрая навигация',
+                text: 'Текстовый блок',
             }
         } else {
             this.blockTypes = {
                 ourBlog: 'Наш блог',
                 myBlog: 'Мой блог',
                 birthdays: 'Дни рождений',
+                text: 'Текстовый блок',
             }
         }
 
-        if (this.defaultBlocks && Object.values(this.defaultBlocks).length > 0) {
-            this.blocks = this.defaultBlocks
+        if (this.defaultBlocks && this.defaultBlocks.length > 0) {
+            this.blocks = this.defaultBlocks.map(block => ({
+                type: block.type || 'null',
+                content: block.content || ''
+            }));
         }
+
+        console.error(this.blocks)
     },
     methods: {
         addBlock() {
-            this.blocks.push('null')
+            this.blocks.push({ type: 'null', content: '' });
+        },
+        removeBlock(index) {
+            this.blocks.splice(index, 1);
         }
     },
     watch: {
