@@ -12,7 +12,7 @@ class PageController extends Controller
     public function index()
     {
         return ApiService::jsonResponse(
-            Page::query()->where('active', true)->select(['id', 'title', 'menu_title', 'uri'])->get()
+            Page::query()->where('active', true)->select(['id', 'title', 'menu_title', 'url'])->get()
         );
     }
 
