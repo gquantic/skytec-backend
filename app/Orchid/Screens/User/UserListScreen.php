@@ -36,6 +36,12 @@ class UserListScreen extends Screen
             $users->where('login', $login);
         }
 
+        if ($name = OrchidService::getFilter($request, 'name')) {
+            $users->where('firstname', 'like', "%$name%")
+                ->orWhere('lastname', 'like', "%$name%")
+                ->orWhere('surname', 'like', "%$name%");
+        }
+
         return [
             'users' => $users->paginate(),
         ];
