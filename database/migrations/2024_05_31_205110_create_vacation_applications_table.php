@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('start_date');
             $table->date('end_date');
             $table->string('status')->default(\Illuminate\Support\Arr::first(config('statuses.applications')));
+            $table->boolean('sent')->default(false);
+            $table->string('hash', 32);
             $table->timestamps();
         });
     }

@@ -4,11 +4,14 @@ namespace App\Http\Controllers\Api\Applications;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Applications\VacationApplicationStoreRequest;
+use App\Mail\Vacation\VacationToHeadMail;
 use App\Models\Applications\VacationApplication;
 use App\Services\ApiService;
 use App\Services\MailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class VacationApplicationController extends Controller
 {
@@ -29,18 +32,20 @@ class VacationApplicationController extends Controller
             $vacation = VacationApplication::query()->create(array_merge(
                 $request->all(),
                 [
-                    'user_id' => Auth::id()
+                    'user_id' => Auth::id(),
+                    'hash' => Str::random(32),
                 ]
             ));
 
-            MailService::sendForm('vacation_mail', 'Заявка на отпуск', [
-                'Ф.И.О. сотрудника' => $vacation->user->name,
-                'Причина' => $vacation->reason,
-                'Тип отпуска' => $vacation->vacation_type,
-                'Начало' => $vacation->start_date,
-                'Конец' => $vacation->end_date,
-            ]);
+//            MailService::sendForm('vacation_mail', 'Заявка на отпуск', [
+//                'Ф.И.О. сотрудника' => $vacation->user->name,
+//                'Причина' => $vacation->reason,
+//                'Тип отпуска' => $vacation->vacation_type,
+//                'Начало' => $vacation->start_date,
+//                'Конец' => $vacation->end_date,
+//            ]);
 
+            Mail::to(MailService::getMailAddresses('vacation_to_head'))->send(new VacationToHeadMail($vacation));
 
             return ApiService::jsonResponse('Заявка на отпуск успешна создана.', 200);
         } catch (\Exception $exception) {

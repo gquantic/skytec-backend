@@ -14,6 +14,8 @@ class VacationApplication extends Model
 
     protected $appends = ['name'];
 
+    protected $hidden = ['hash'];
+
     public function getNameAttribute($value): string
     {
         return 'Заявка на отпуск';

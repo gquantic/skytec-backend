@@ -35,7 +35,7 @@ class AuthController extends Controller
         // Проверяем наличие пользователя в локальной базе данных
         if (
 //            false
-            $user = User::query()->where('login', $credentials['login'])->first() && config('app.debug') === 'local'
+            $user = User::query()->where('login', $credentials['login'])->first() //&& config('app.debug') === 'local'
         ) {
             // Проверяем пароль в локальной базе данных
             if (Hash::check($credentials['password'], $user->password)) {

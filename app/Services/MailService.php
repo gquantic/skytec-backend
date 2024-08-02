@@ -12,7 +12,7 @@ class MailService
         return Mail::to(self::getMailAddresses($formType))->send(new FormMail(title: $formTitle, data: $data, files: $files));
     }
 
-    private static function getMailAddresses(string $formType)
+    public static function getMailAddresses(string $formType)
     {
         return app_config()->get($formType, dev: config('mail.dev'));
     }
