@@ -107,4 +107,10 @@ class MenuItemListScreen extends Screen
 
         Toast::success('Позиция в меню изменена успешно.');
     }
+
+    public function delete(MenuItem $menuItem, Request $request)
+    {
+        $menuItem->delete();
+        Toast::warning('Ссылка удалена.');
+    }
 }

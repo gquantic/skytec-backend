@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts\MenuItem;
 
 use App\Models\Menu\MenuItem;
+use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Actions\ModalToggle;
 use Orchid\Screen\Layouts\Table;
@@ -54,6 +55,15 @@ class MenuItemsListLayout extends Table
                     return Link::make('Редактировать')
                         ->icon('pencil')
                         ->route('platform.menu-items.edit', $menuItem->id);
+                }),
+
+            TD::make('menuItem.delete', '')
+                ->width(100)
+                ->render(function (MenuItem $menuItem) {
+                    return Button::make('Удалить')
+                        ->icon('trash')
+                        ->confirm('Вы уверены? Ссылка будет удалена из верхнего и левого меню. Если вы хотите убрать ссылку из определенного меню, то просто отредактируйте ссылку.')
+                        ->method('delete');
                 }),
         ];
     }
