@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        Department::factory()->count(5)->create();
+//        Department::factory()->count(5)->create();
 
 //        User::factory()->count(80)->create();
 
@@ -51,9 +51,9 @@ class DatabaseSeeder extends Seeder
 //        ArticleCategory::factory()->count(10)->create();
 //        Article::factory()->count(200)->create();
 
-        foreach (User::query()->offset(5)->limit(1000)->get() as $user) {
-            $user->manager_id = rand(1,5);
-            $user->save();
-        }
+//        foreach (User::query()->offset(5)->limit(1000)->get() as $user) {
+//            $user->manager_id = rand(1,5);
+//            $user->save();
+//        }
     }
 }
