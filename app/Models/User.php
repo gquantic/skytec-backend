@@ -23,18 +23,18 @@ class User extends Authenticatable implements LdapAuthenticatable
      *
      * @var array
      */
-    protected $hidden = [
+   /* protected $hidden = [
         'password',
         'remember_token',
         'permissions',
         'created_at',
         'updated_at',
         'email_verified_at',
-    ];
+    ];*/
 
     protected $guarded = [
-        'manager_id',
-        'id',
+        //'manager_id',
+        //'id',
     ];
 
     /**

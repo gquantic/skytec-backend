@@ -27,6 +27,6 @@ class UpdateUsers extends Command
      */
     public function handle()
     {
-        Excel::import(new UsersImport, public_path('Company_structure.xlsx'));
+        Excel::import(new UsersImport, '/mnt/share/Company_structure.xlsx');
     }
 }

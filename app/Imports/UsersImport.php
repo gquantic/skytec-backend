@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\Models\User;
+use App\Models\User as LocalUser;
 use App\Repositories\UserRepository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
@@ -45,30 +45,58 @@ class UsersImport implements ToCollection
 
             $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('mail', trim($row[$this->cells['email']]));
 
-            if ($ldapUser == null) {
+            if ($ldapUser == null || $ldapUser->getFirstAttribute('sAMAccountName') == '') {
                 continue;
             }
 
+            $isDirector = false;
+            if (trim($row[$this->cells['department']]) == '') {
+                $isDirector = true;
+            }
+
+            //dd($ldapUser->getFirstAttribute('sAMAccountName'));
+
             $explodedName = explode(' ', $row[$this->cells['fio']]);
 
+            $headId = null;
+
+            // Указываем руководителя
+            if (trim($row[$this->cells['head']]) != '') {
+                if ($headUser = LocalUser::query()->where('name', trim($row[$this->cells['head']]))->first()) {
+                    $headId = $headUser->id;
+                }
+            }
+
             $data = [
+                'manager_id' => $headId,
                 'avatar' => $ldapUser->getFirstAttribute('thumbnailphoto') != '' ? $this->pasteImage($ldapUser->getFirstAttribute('thumbnailphoto')) : '',
-                'name' => $row[$this->cells['fio']],
+                'name' => trim($row[$this->cells['fio']]),
                 'login' => $ldapUser->getFirstAttribute('sAMAccountName'),
                 'firstname' => $explodedName[0] ?? '',
                 'lastname' => $explodedName[1] ?? '',
                 'surname' => $explodedName[2] ?? '',
                 'password' => Hash::make(Str::random(8)),
                 'position' => trim($row[$this->cells['position']]),
+                'is_director' => $isDirector,
             ];
+
+            //dd($data);
 
             if (trim($row[$this->cells['department']]) != '') {
                 $data['department_id'] = $this->departmentRepository->firstOrCreate(['title' => trim($row[$this->cells['department']])], [])->id;
             }
 
-            User::query()->updateOrCreate([
+            $localUser = LocalUser::query()->firstOrNew([
                 'email' => trim($row[$this->cells['email']])
-            ], $data);
+            ]);
+
+            foreach ($data as $key => $value) {
+                $localUser->$key = $value;
+            }
+
+            $localUser->save();
+
+            echo "User {$data['name']} imported \n\n";
         }
     }
 

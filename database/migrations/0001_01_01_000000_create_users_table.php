@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('password');
 
             $table->boolean('hide_phone')->default(false);
+            $table->boolean('is_director')->default(false);
 
             $table->rememberToken();
             $table->timestamps();
