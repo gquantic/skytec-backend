@@ -6,6 +6,7 @@ use App\Orchid\Fields\PageBlocksEditor;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 use Orchid\Support\Facades\Layout;
@@ -47,6 +48,13 @@ class PageCreateLayout extends Rows
                 ->placeholder('Страница опубликована')
                 ->help('Нажмите опубликовать для выборки. Если убрать галочку, страница будет убрана из меню, а пользователю,
                 перешедшему на неё, будет выдаваться 404 ошибка.'),
+
+            Select::make('page.left_menu')
+                ->title('Показывать меню слева')
+                ->options([
+                    false => 'Нет',
+                    true => 'Да',
+                ]),
         ];
     }
 }

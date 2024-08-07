@@ -21,6 +21,7 @@ return new class extends Migration
             $table->longText('left')->nullable();
             $table->longText('center')->nullable();
             $table->longText('right')->nullable();
+            $table->boolean('left_menu');
             $table->boolean('active');
             $table->timestamps();
         });

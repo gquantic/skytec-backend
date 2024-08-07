@@ -51,8 +51,17 @@ export default {
             this.blockTypes = {
                 documents: 'Документы',
                 download: 'Загрузка',
-                request: 'Заявка',
+                request: 'Заявка в AXO',
                 fastNavigation: 'Быстрая навигация',
+                advantages: 'Преимущества',
+                createNewEmployee: 'Создать учетную запись сотрудника',
+                idea: 'Бизнес идея',
+                keyPersons: 'Ключевые лица компании',
+                newEmployee: 'Welcome-Book и создание учетной записи (ссылка)',
+                privilege: 'Привелегии',
+                services: 'Услуги',
+                structure: 'Структура компании',
+                vacancies: 'Вакансии',
                 text: 'Текстовый блок',
             }
         } else {
