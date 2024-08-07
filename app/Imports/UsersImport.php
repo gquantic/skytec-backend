@@ -46,6 +46,7 @@ class UsersImport implements ToCollection
             $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('mail', trim($row[$this->cells['email']]));
 
             if ($ldapUser == null || $ldapUser->getFirstAttribute('sAMAccountName') == '') {
+                echo "no ldap user for {$row[$this->cells['email']]}";
                 continue;
             }
 

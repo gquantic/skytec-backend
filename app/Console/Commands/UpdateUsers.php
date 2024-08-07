@@ -13,7 +13,7 @@ class UpdateUsers extends Command
      *
      * @var string
      */
-    protected $signature = 'users:update';
+    protected $signature = 'users:import';
 
     /**
      * The console command description.

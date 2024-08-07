@@ -13,6 +13,7 @@ use Orchid\Filters\Types\WhereDateStartEnd;
 use Orchid\Platform\Models\User as Authenticatable;
 use LdapRecord\Laravel\Auth\LdapAuthenticatable;
 use LdapRecord\Laravel\Auth\AuthenticatesWithLdap;
+use Illuminate\Support\Facades\Storage;
 
 class User extends Authenticatable implements LdapAuthenticatable
 {
@@ -87,7 +88,12 @@ class User extends Authenticatable implements LdapAuthenticatable
 
     public function getAvatarAttribute($value): string
     {
-        return $value == '' || $value == null ? '/img/default_avatar.jpeg' : $value;
+        return $value == '' || $value == null ? $this->getDefaultAvatar() : $value;
+    }
+
+    private function getDefaultAvatar()
+    {
+        return config('app.url') . '/img/default_avatar.jpeg';
     }
 
     public function getEmploymentDateAttribute($value): string
