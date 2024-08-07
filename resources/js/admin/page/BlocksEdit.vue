@@ -49,7 +49,9 @@ export default {
     mounted() {
         if (this.position === 'center') {
             this.blockTypes = {
+                carousel: 'Баннер',
                 documents: 'Документы',
+                news: 'Новости',
                 download: 'Загрузка',
                 request: 'Заявка в AXO',
                 fastNavigation: 'Быстрая навигация',
