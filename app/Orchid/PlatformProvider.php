@@ -61,6 +61,10 @@ class PlatformProvider extends OrchidServiceProvider
                 ->route('platform.pages.list')
                 ->title(__('Сайт')),
 
+            Menu::make(__('Скачиваемые файлы'))
+                ->icon('bs.ui-checks-grid')
+                ->route('platform.download-files.list'),
+
             Menu::make(__('Ссылки в меню'))
                 ->icon('bs.ui-checks-grid')
                 ->route('platform.menu-items.list'),

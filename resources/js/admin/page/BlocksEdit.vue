@@ -60,7 +60,7 @@ export default {
                 idea: 'Бизнес идея',
                 keyPersons: 'Ключевые лица компании',
                 newEmployee: 'Welcome-Book и создание учетной записи (ссылка)',
-                privilege: 'Привелегии',
+                privilege: 'Привилегии',
                 services: 'Услуги',
                 structure: 'Структура компании',
                 vacancies: 'Вакансии',

@@ -32,7 +32,7 @@ class DocumentEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'DocumentEditScreen';
+        return 'Редактирование файла';
     }
 
     /**

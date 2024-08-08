@@ -12,6 +12,7 @@ Route::prefix('user')->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/documents', 'App\Http\Controllers\Api\DocumentController@index');
+    Route::get('/download/{download:slug}', 'App\Http\Controllers\Api\DownloadFileController@download');
 
     Route::get('/pages', 'App\Http\Controllers\Api\Content\PageController@index');
     Route::get('/pages/{page:url}', 'App\Http\Controllers\Api\Content\PageController@show');

@@ -89,6 +89,12 @@ Route::screen('/menu-items/create', \App\Orchid\Screens\MenuItem\MenuItemCreateS
 Route::screen('/menu-items/{menuItem}/edit', \App\Orchid\Screens\MenuItem\MenuItemEditScreen::class)
     ->name('platform.menu-items.edit');
 
+Route::screen('/download-files', \App\Orchid\Screens\DownloadFile\DownloadFileListScreen::class)
+    ->name('platform.download-files.list');
+
+Route::screen('/download-files/{file}/edit', \App\Orchid\Screens\DownloadFile\DownloadFileEditScreen::class)
+    ->name('platform.download-files.edit');
+
 // Platform > Profile
 Route::screen('profile', UserProfileScreen::class)
     ->name('platform.profile')
