@@ -79,6 +79,7 @@ Route::middleware('auth:sanctum')->group(function () {
             'business-trip' => \App\Http\Controllers\Api\Applications\BusinessTripApplicationController::class,
             'vacation' => \App\Http\Controllers\Api\Applications\VacationApplicationController::class,
             'education' => \App\Http\Controllers\Api\Applications\EducationApplicationController::class,
+            'certificate' => \App\Http\Controllers\Api\Applications\CertificateApplicationController::class,
         ]);
     });
 });
