@@ -1,12 +1,14 @@
 @php
     $data = [
         'Ф.И.О. сотрудника' => $vacation->user->name,
-        'Подразделение и должность' => $vacation->user->department->title . ", " . $vacation->user->position,
+        'Подразделение и должность' => ($vacation->user->department->title ?? 'Нет подразделения') . ", " . $vacation->user->position,
         'Причина' => $vacation->reason,
         'Тип отпуска' => $vacation->vacation_type,
         'Начало' => $vacation->start_date,
         'Конец' => $vacation->end_date,
     ];
+
+    $type = $vacation->approved_with_head == true ? 'hr' : 'head';
 @endphp
 
 <h3>Заявка на отпуск</h3>
@@ -20,10 +22,10 @@
 
 <td>
     <tr>
-        <a href="{{ route('vacation.decline', $vacation->hash) }}?status=declined" class="decline">Отклонить</a>
+        <a href="{{ route('vacation.decline', $vacation->hash) }}?status=declined&type={{ $type }}" class="decline">Отклонить</a>
     </tr>
     <tr>
-        <a href="{{ route('vacation.accept', $vacation->hash) }}?status=accepted" class="accept">Одобрить</a>
+        <a href="{{ route('vacation.accept', $vacation->hash) }}?status=accepted&type={{ $type }}" class="accept">Одобрить</a>
     </tr>
 </td>
 

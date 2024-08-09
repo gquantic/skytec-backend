@@ -6,6 +6,8 @@ use App\Models\Menu\MenuItem;
 use App\Models\Page\Page;
 use App\Orchid\Layouts\MenuItem\MenuItemCreateLayout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
@@ -60,12 +62,22 @@ class MenuItemCreateScreen extends Screen
 
     public function save(Request $request)
     {
-        $data = $request->collect('item')->toArray();
+        $data = $request->collect('item')->except('type')->toArray();
+        $fullData = $request->collect('item');
+
         $data['sort_top'] = $data['sort_top'] ?? 0;
         $data['sort_left'] = $data['sort_left'] ?? 0;
 
-        if ($data['page_id'] != null) {
-            $data['url'] = Page::query()->findOrFail($data['page_id'])->url;
+//        if ($data['page_id'] != null) {
+//            $data['url'] = Page::query()->findOrFail($data['page_id'])->url;
+//        }
+
+        if ($fullData['type'] == 'page') {
+            $data['url'] = "/page/" . Page::query()->findOrFail($data['page_id'])->url;
+        }
+
+        if (!Str::startsWith($data['url'], ['http', 'https', '/'])) {
+            $data['url'] = '/' . $data['url'];
         }
 
         MenuItem::query()->create(

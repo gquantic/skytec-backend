@@ -28,16 +28,21 @@ class MenuItemCreateLayout extends Rows
             Input::make('item.title')
                 ->title('Название ссылки'),
 
-            Select::make('item.page_id')
+            Select::make('item.type')
                 ->title('Страница')
                 ->help('Если указана страница, указанная ниже прямая ссылка не будет работать')
                 ->options([
-                        null => '→ Прямая ссылка'
-                    ] + Page::all()->pluck('title', 'id')->toArray()),
+                        'url' => '→ Прямая ссылка',
+                        'page' => '→ Ссылка на созданную страницу',
+                    ]),
+
+            Select::make('item.page_id')
+                ->title('Страница')
+                ->help('Если указана страница, указанная ниже прямая ссылка не будет работать')
+                ->options(Page::all()->pluck('title', 'id')->toArray()),
 
             Input::make('item.url')
-                ->title('Ссылка')
-                ->help('❗ Обязательно добавьте префикс http, если это прямая ссылка ❗ <br> Если выбрана страница, поле будет замещено автоматом'),
+                ->title('Ссылка'),
 
             Select::make('item.top_menu')
                 ->title('Показывать в верхнем меню')

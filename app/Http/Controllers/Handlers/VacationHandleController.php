@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Handlers;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Vacation\VacationToHeadMail;
 use App\Models\Applications\VacationApplication;
+use App\Services\MailService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class VacationHandleController extends Controller
 {
@@ -12,12 +15,20 @@ class VacationHandleController extends Controller
     {
         $already = true;
         if ($vacation->status == 'На рассмотрении') {
-//            abort(403, "Решение по заявке уже принято: {$vacation->status}");
-            $status = $request->get('status');
-            $vacation->status = config('statuses.applications')[$status];
-            $vacation->save();
+            if ($request->get('type') == 'hr') {
+                $status = $request->get('status');
+                $vacation->status = config('statuses.applications')[$status];
+                $vacation->save();
 
-            $already = false;
+                $already = false;
+            } else {
+                $vacation->approved_with_head = true;
+                $vacation->save();
+
+                Mail::to(MailService::getMailAddresses('vacation_to_head'))->send(new VacationToHeadMail($vacation));
+
+                $already = false;
+            }
         }
 
 
@@ -38,5 +49,15 @@ class VacationHandleController extends Controller
         }
 
         return view('vacation-status', compact('vacation', 'already'));
+    }
+
+    private function hrAccept()
+    {
+
+    }
+
+    private function headAccept()
+    {
+
     }
 }

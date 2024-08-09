@@ -49,7 +49,7 @@ class VacationApplicationController extends Controller
 
             return ApiService::jsonResponse('Заявка на отпуск успешна создана.', 200);
         } catch (\Exception $exception) {
-            return ApiService::jsonResponse('Неизвестная ошибка.', 500);
+            return ApiService::jsonResponse($exception->getMessage(), 500);
         }
     }
 
