@@ -36,6 +36,8 @@ return new class extends Migration
             $table->boolean('hide_phone')->default(false);
             $table->boolean('is_director')->default(false);
 
+            $table->string('company')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });

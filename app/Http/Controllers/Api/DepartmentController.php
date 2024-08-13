@@ -8,8 +8,11 @@ use Illuminate\Http\Request;
 
 class DepartmentController extends Controller
 {
-    public function getDepartments()
+    public function getDepartments(string $company)
     {
-        return Department::with('users')->get();
+        return Department::query()
+            ->where('company', $company)
+            ->with('users')
+            ->get();
     }
 }
