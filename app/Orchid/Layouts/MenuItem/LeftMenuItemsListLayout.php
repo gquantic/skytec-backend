@@ -66,7 +66,7 @@ class LeftMenuItemsListLayout extends Table
                         ->confirm('Вы уверены? Ссылка будет удалена из верхнего и левого меню. Если вы хотите убрать ссылку из определенного меню, то просто отредактируйте ссылку.')
                         ->method('delete')
                         ->parameters([
-                            'menuItem' => $menuItem,
+                            'menuItem' => $menuItem->id,
                         ]);
                 }),
         ];
