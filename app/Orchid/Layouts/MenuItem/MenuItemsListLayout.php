@@ -63,7 +63,10 @@ class MenuItemsListLayout extends Table
                     return Button::make('Удалить')
                         ->icon('trash')
                         ->confirm('Вы уверены? Ссылка будет удалена из верхнего и левого меню. Если вы хотите убрать ссылку из определенного меню, то просто отредактируйте ссылку.')
-                        ->method('delete');
+                        ->method('delete')
+                        ->parameters([
+                            'menuItem' => $menuItem->id,
+                        ]);
                 }),
         ];
     }

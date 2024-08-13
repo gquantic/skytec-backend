@@ -27,6 +27,7 @@ class DocumentCreateLayout extends Rows
         return [
             Input::make('document.title')
                 ->title('Название')
+                ->required()
                 ->type('text'),
 
             Upload::make('document.attachment')
