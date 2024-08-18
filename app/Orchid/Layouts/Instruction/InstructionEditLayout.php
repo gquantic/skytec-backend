@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Orchid\Layouts\Document;
+namespace App\Orchid\Layouts\Instruction;
 
 use Orchid\Screen\Field;
-use Orchid\Screen\Fields\CheckBox;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Layouts\Rows;
 
-class DocumentCreateLayout extends Rows
+class InstructionEditLayout extends Rows
 {
     /**
      * Used to create the title of a group of form elements.
@@ -26,24 +25,14 @@ class DocumentCreateLayout extends Rows
     protected function fields(): iterable
     {
         return [
-            Select::make('document.company')
-                ->title('Компания')
-                ->options(config('structure.companies')),
-
             Input::make('document.title')
                 ->title('Название')
-                ->required()
                 ->type('text'),
 
             Upload::make('document.attachment')
                 ->title('Файл')
                 ->closeOnAdd()
                 ->media(),
-
-//            CheckBox::make('document.show')
-//                ->title('Показывать на сайте')
-//                ->placeholder('Документ будет отображен в разделе Нормативные документы')
-//                ->value(1)
         ];
     }
 }

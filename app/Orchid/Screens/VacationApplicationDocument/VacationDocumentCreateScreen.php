@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Orchid\Screens\Document;
+namespace App\Orchid\Screens\VacationApplicationDocument;
 
 use App\Models\Documents\Document;
+use App\Models\Documents\VacationApplicationDocument;
 use App\Orchid\Layouts\Document\DocumentCreateLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
 
-class DocumentEditScreen extends Screen
+class VacationDocumentCreateScreen extends Screen
 {
     public $document;
 
@@ -18,11 +19,9 @@ class DocumentEditScreen extends Screen
      *
      * @return array
      */
-    public function query(Document $document): iterable
+    public function query(): iterable
     {
-        return [
-            'document' => $document
-        ];
+        return [];
     }
 
     /**
@@ -32,7 +31,7 @@ class DocumentEditScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Редактирование файла';
+        return 'Добавление документа';
     }
 
     /**
@@ -45,7 +44,7 @@ class DocumentEditScreen extends Screen
         return [
             Button::make('Сохранить')
                 ->icon('check')
-                ->method('saveDocument')
+                ->method('createDocument'),
         ];
     }
 
@@ -57,15 +56,16 @@ class DocumentEditScreen extends Screen
     public function layout(): iterable
     {
         return [
-            DocumentCreateLayout::class
+            DocumentCreateLayout::class,
         ];
     }
 
-    public function saveDocument(Request $request, Document $document)
+    public function createDocument(Request $request, VacationApplicationDocument $document)
     {
         $data = $request->collect('document')->toArray();
+        $data['show'] = true;
 
-        $document->update($data);
+        VacationApplicationDocument::query()->create($data);
 
         Toast::info('Документ успешно добавлен.');
         return redirect()->route('platform.documents.list');

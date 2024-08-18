@@ -11,7 +11,10 @@ class DepartmentFactory extends Factory
 
     public function definition(): array
     {
+        $companies = ['СкайТек Медиа', 'Скай Альянс', 'ТЕКНОУЛОДЖИ', 'ПИНЬПАЙ'];
+
         return [
+            'company' => $companies[rand(0,3)],
             'title' => $this->faker->word(),
             'description' => $this->faker->text(),
         ];

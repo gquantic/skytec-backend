@@ -11,7 +11,9 @@ Route::prefix('user')->group(function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/documents', 'App\Http\Controllers\Api\DocumentController@index');
+    Route::get('/documents/{company}', 'App\Http\Controllers\Api\DocumentController@index');
+    Route::get('/vacations/{company}', 'App\Http\Controllers\Api\DocumentController@vacations');
+    Route::get('/instructions', 'App\Http\Controllers\Api\DocumentController@instructions');
     Route::get('/download/{download:slug}', 'App\Http\Controllers\Api\DownloadFileController@download');
 
     Route::get('/pages', 'App\Http\Controllers\Api\Content\PageController@index');

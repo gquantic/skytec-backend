@@ -37,7 +37,6 @@ class TestInstallService extends Command
         NewsCategory::factory()->count(5)->create();
         News::factory()->count(30)->create();
 
-
         ArticleCategory::factory()->count(30)->create();
         Article::factory()->count(30)->create();
     }

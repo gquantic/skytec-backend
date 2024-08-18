@@ -1,14 +1,16 @@
 <?php
 
-namespace App\Orchid\Screens\Document;
+namespace App\Orchid\Screens\VacationApplicationDocument;
 
-use App\Models\Documents\Document;
+use App\Models\Applications\VacationApplication;
+use App\Models\Documents\VacationApplicationDocument;
 use App\Orchid\Layouts\Document\DocumentListLayout;
+use App\Orchid\Layouts\VacationDocument\VacationDocumentListLayout;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
 
-class DocumentListScreen extends Screen
+class VacationDocumentListScreen extends Screen
 {
     /**
      * Fetch data to be displayed on the screen.
@@ -18,7 +20,7 @@ class DocumentListScreen extends Screen
     public function query(): iterable
     {
         return [
-            'documents' => Document::all(),
+            'documents' => VacationApplicationDocument::all(),
         ];
     }
 
@@ -29,7 +31,7 @@ class DocumentListScreen extends Screen
      */
     public function name(): ?string
     {
-        return 'Список документов';
+        return 'Список заявлений на отпуск';
     }
 
     /**
@@ -41,7 +43,7 @@ class DocumentListScreen extends Screen
     {
         return [
             Link::make('Добавить документ')
-                ->route('platform.documents.create')
+                ->route('platform.vacation-documents.create')
                 ->icon('plus')
         ];
     }
@@ -54,11 +56,11 @@ class DocumentListScreen extends Screen
     public function layout(): iterable
     {
         return [
-            DocumentListLayout::class
+            VacationDocumentListLayout::class
         ];
     }
 
-    public function remove(Document $document)
+    public function remove(VacationApplicationDocument $document)
     {
         $document->delete();
         Toast::error("Документ {$document->title} удален");

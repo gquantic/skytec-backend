@@ -44,6 +44,24 @@ Route::screen('/documents/create', \App\Orchid\Screens\Document\DocumentCreateSc
 Route::screen('/documents/edit/{document}', \App\Orchid\Screens\Document\DocumentEditScreen::class)
     ->name('platform.documents.edit');
 
+Route::screen('/vacation-documents', \App\Orchid\Screens\VacationApplicationDocument\VacationDocumentListScreen::class)
+    ->name('platform.vacation-documents.list');
+
+Route::screen('/vacation-documents/create', \App\Orchid\Screens\VacationApplicationDocument\VacationDocumentCreateScreen::class)
+    ->name('platform.vacation-documents.create');
+
+Route::screen('/vacation-documents/edit/{document}', \App\Orchid\Screens\VacationApplicationDocument\VacationDocumentEditScreen::class)
+    ->name('platform.vacation-documents.edit');
+
+Route::screen('/instructions', \App\Orchid\Screens\Instruction\InstructionListScreen::class)
+    ->name('platform.instructions.list');
+
+Route::screen('/instructions/create', \App\Orchid\Screens\Instruction\InstructionCreateScreen::class)
+    ->name('platform.instructions.create');
+
+Route::screen('/instructions/edit/{document}', \App\Orchid\Screens\Instruction\InstructionEditScreen::class)
+    ->name('platform.instructions.edit');
+
 Route::screen('/articles', \App\Orchid\Screens\Article\ArticleListScreen::class)
     ->name('platform.articles.list');
 

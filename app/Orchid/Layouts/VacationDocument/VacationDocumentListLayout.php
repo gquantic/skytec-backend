@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Orchid\Layouts\Document;
+namespace App\Orchid\Layouts\VacationDocument;
 
 use App\Models\Documents\Document;
+use App\Models\Documents\VacationApplicationDocument;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
-class DocumentListLayout extends Table
+class VacationDocumentListLayout extends Table
 {
     /**
      * Data source.
@@ -29,16 +30,16 @@ class DocumentListLayout extends Table
     {
         return [
             TD::make('id', '#')
-                ->render(fn (Document $document) => $document->id),
-
-            TD::make('company', 'Company')
-                ->render(fn (Document $document) => $document->company),
+                ->render(fn (VacationApplicationDocument $document) => $document->id),
 
             TD::make('title', 'Title')
-                ->render(fn (Document $document) => $document->title),
+                ->render(fn (VacationApplicationDocument $document) => $document->title),
+
+            TD::make('company', 'Company')
+                ->render(fn (VacationApplicationDocument $document) => $document->company),
 
             TD::make('attachment', 'File')
-                ->render(function (Document $document) {
+                ->render(function (VacationApplicationDocument $document) {
                     return Link::make('Перейти к файлу')
                         ->target('blank')
                         ->href($document->document);
@@ -46,14 +47,14 @@ class DocumentListLayout extends Table
 
             TD::make('')
                 ->width(80)
-                ->render(function (Document $document) {
+                ->render(function (VacationApplicationDocument $document) {
                     return Link::make('Редактировать')
                         ->target('blank')
                         ->route('platform.documents.edit', $document->id);
                 }),
             TD::make('')
                 ->width(60)
-                ->render(function (Document $document) {
+                ->render(function (VacationApplicationDocument $document) {
                     return Button::make('Удалить')
                         ->method('remove', ['document' => $document]);
                 }),

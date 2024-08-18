@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Orchid\Layouts\Document;
+namespace App\Orchid\Layouts\Instruction;
 
-use App\Models\Documents\Document;
+use App\Models\Documents\Instruction;
+use App\Models\Documents\VacationApplicationDocument;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Layouts\Table;
 use Orchid\Screen\TD;
 
-class DocumentListLayout extends Table
+class InstructionListLayout extends Table
 {
     /**
      * Data source.
@@ -18,7 +19,7 @@ class DocumentListLayout extends Table
      *
      * @var string
      */
-    protected $target = 'documents';
+    protected $target = 'document';
 
     /**
      * Get the table cells to be displayed.
@@ -29,33 +30,30 @@ class DocumentListLayout extends Table
     {
         return [
             TD::make('id', '#')
-                ->render(fn (Document $document) => $document->id),
-
-            TD::make('company', 'Company')
-                ->render(fn (Document $document) => $document->company),
+                ->render(fn (Instruction $instruction) => $instruction->id),
 
             TD::make('title', 'Title')
-                ->render(fn (Document $document) => $document->title),
+                ->render(fn (Instruction $instruction) => $instruction->title),
 
             TD::make('attachment', 'File')
-                ->render(function (Document $document) {
+                ->render(function (Instruction $instruction) {
                     return Link::make('Перейти к файлу')
                         ->target('blank')
-                        ->href($document->document);
+                        ->href($instruction->document);
                 }),
 
             TD::make('')
                 ->width(80)
-                ->render(function (Document $document) {
+                ->render(function (Instruction $instruction) {
                     return Link::make('Редактировать')
                         ->target('blank')
-                        ->route('platform.documents.edit', $document->id);
+                        ->route('platform.documents.edit', $instruction->id);
                 }),
             TD::make('')
                 ->width(60)
-                ->render(function (Document $document) {
+                ->render(function (Instruction $instruction) {
                     return Button::make('Удалить')
-                        ->method('remove', ['document' => $document]);
+                        ->method('remove', ['document' => $instruction]);
                 }),
         ];
     }

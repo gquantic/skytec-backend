@@ -56,6 +56,20 @@ class PlatformProvider extends OrchidServiceProvider
                 ->permission('platform.systems.roles')
                 ->divider(),
 
+            Menu::make(__('Документы'))
+                ->title('Документы')
+                ->icon('bs.ui-checks-grid')
+                ->divider()
+                ->route('platform.documents.list'),
+
+            Menu::make(__('Заявление на отпуск'))
+                ->icon('bs.ui-checks-grid')
+                ->route('platform.vacation-documents.list'),
+
+            Menu::make(__('Инструкции'))
+                ->icon('bs.ui-checks-grid')
+                ->route('platform.instructions.list'),
+
             Menu::make(__('Страницы сайта'))
                 ->icon('bs.ui-checks-grid')
                 ->route('platform.pages.list')
@@ -72,10 +86,6 @@ class PlatformProvider extends OrchidServiceProvider
             Menu::make(__('Настройки сайта'))
                 ->icon('bs.ui-checks-grid')
                 ->route('platform.systems.configs'),
-
-            Menu::make(__('Документы'))
-                ->icon('bs.ui-checks-grid')
-                ->route('platform.documents.list'),
 
             Menu::make(__('Статьи'))
                 ->icon('bs.ui-checks-grid')

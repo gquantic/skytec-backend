@@ -2,11 +2,8 @@
 
 namespace App\Orchid\Screens\DownloadFile;
 
-use App\Models\Document;
 use App\Models\DownloadFile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
-use Orchid\Attachment\Models\Attachment;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Upload;

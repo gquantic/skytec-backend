@@ -2,15 +2,11 @@
 
 namespace App\Orchid\Screens\Document;
 
-use App\Models\Document;
+use App\Models\Documents\Document;
 use App\Orchid\Layouts\Document\DocumentCreateLayout;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
-use Orchid\Screen\Fields\CheckBox;
-use Orchid\Screen\Fields\Input;
-use Orchid\Screen\Fields\Upload;
 use Orchid\Screen\Screen;
-use Orchid\Support\Facades\Layout;
 use Orchid\Support\Facades\Toast;
 
 class DocumentCreateScreen extends Screen

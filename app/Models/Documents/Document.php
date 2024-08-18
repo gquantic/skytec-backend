@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Documents;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Facades\Storage;
-use Orchid\Attachment\Attachable;
 use Orchid\Attachment\Models\Attachment;
 
 class Document extends Model
