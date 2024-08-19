@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('vacation_application_documents', function (Blueprint $table) {
             $table->id();
-            $table->string('company');
             $table->string('title');
             $table->string('attachment', 256);
             $table->boolean('show');
