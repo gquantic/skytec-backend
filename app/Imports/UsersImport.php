@@ -30,8 +30,9 @@ class UsersImport implements ToCollection
             'email' => 2, // Адрес электронной почты
             'position' => 3, // Должность
             'department' => 4, // Отдел
-            'head' => 5, // Непосредственный руководитель
-            'head_lat' => 6, // Непосредственный руководитель на латинице
+            'company' => 5, // Отдел
+            'head' => 6, // Непосредственный руководитель
+            'head_lat' => 7, // Непосредственный руководитель на латинице
         ];
     }
 
@@ -46,7 +47,7 @@ class UsersImport implements ToCollection
             $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('mail', trim($row[$this->cells['email']]));
 
             if ($ldapUser == null || $ldapUser->getFirstAttribute('sAMAccountName') == '') {
-                echo "no ldap user for {$row[$this->cells['email']]}";
+                //echo "no ldap user for {$row[$this->cells['email']]}";
                 continue;
             }
 
@@ -64,12 +65,14 @@ class UsersImport implements ToCollection
             // Указываем руководителя
             if (trim($row[$this->cells['head']]) != '') {
                 if ($headUser = LocalUser::query()->where('name', trim($row[$this->cells['head']]))->first()) {
+                    echo "{$headUser->name} is head \n\n";
                     $headId = $headUser->id;
                 }
             }
 
             $data = [
                 'manager_id' => $headId,
+                'company' => trim($row[$this->cells['company']]),
                 'avatar' => $ldapUser->getFirstAttribute('thumbnailphoto') != '' ? $this->pasteImage($ldapUser->getFirstAttribute('thumbnailphoto')) : '',
                 'name' => trim($row[$this->cells['fio']]),
                 'login' => $ldapUser->getFirstAttribute('sAMAccountName'),
@@ -84,7 +87,10 @@ class UsersImport implements ToCollection
             //dd($data);
 
             if (trim($row[$this->cells['department']]) != '') {
-                $data['department_id'] = $this->departmentRepository->firstOrCreate(['title' => trim($row[$this->cells['department']])], [])->id;
+                $data['department_id'] = $this->departmentRepository->firstOrCreate([
+                    'title' => trim($row[$this->cells['department']]),
+                    'company' => trim($row[$this->cells['company']]),
+                ], [])->id;
             }
 
             $localUser = LocalUser::query()->firstOrNew([
@@ -97,7 +103,7 @@ class UsersImport implements ToCollection
 
             $localUser->save();
 
-            echo "User {$data['name']} imported \n\n";
+            //echo "User {$data['name']} imported \n\n";
         }
     }
 
