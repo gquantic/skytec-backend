@@ -21,7 +21,7 @@ class InstructionEditScreen extends Screen
      *
      * @return array
      */
-    public function query(VacationApplicationDocument $document): iterable
+    public function query(Instruction $document): iterable
     {
         return [
             'document' => $document

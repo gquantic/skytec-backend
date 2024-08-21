@@ -19,7 +19,7 @@ class InstructionListLayout extends Table
      *
      * @var string
      */
-    protected $target = 'document';
+    protected $target = 'documents';
 
     /**
      * Get the table cells to be displayed.
@@ -47,7 +47,7 @@ class InstructionListLayout extends Table
                 ->render(function (Instruction $instruction) {
                     return Link::make('Редактировать')
                         ->target('blank')
-                        ->route('platform.documents.edit', $instruction->id);
+                        ->route('platform.instructions.edit', $instruction->id);
                 }),
             TD::make('')
                 ->width(60)
