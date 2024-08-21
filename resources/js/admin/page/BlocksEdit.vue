@@ -50,7 +50,9 @@ export default {
         if (this.position === 'center') {
             this.blockTypes = {
                 carousel: 'Баннер',
-                documents: 'Документы',
+                regulatoryDocuments: 'Нормативные документы',
+                vacation: 'Заявления на отпуск',
+                instructions: 'Инструкции',
                 news: 'Новости',
                 download: 'Загрузка',
                 request: 'Заявка в AXO',
