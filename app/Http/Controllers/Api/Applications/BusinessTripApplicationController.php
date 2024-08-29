@@ -37,6 +37,7 @@ class BusinessTripApplicationController extends Controller
                 'Ф.И.О. сотрудника' => $businessTrip->user->name,
                 'Начало' => $businessTrip->start_date,
                 'Конец' => $businessTrip->end_date,
+                'Куда' => $businessTrip->destination,
             ]);
 
             return ApiService::jsonResponse('Заявка на командировку успешна создана.', 200);
