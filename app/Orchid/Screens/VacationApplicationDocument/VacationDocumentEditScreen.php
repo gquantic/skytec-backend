@@ -69,6 +69,6 @@ class VacationDocumentEditScreen extends Screen
         $document->update($data);
 
         Toast::info('Документ успешно добавлен.');
-        return redirect()->route('platform.documents.list');
+        return redirect()->route('platform.vacation-documents.list');
     }
 }

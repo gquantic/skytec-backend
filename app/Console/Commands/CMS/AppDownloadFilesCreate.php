@@ -43,6 +43,10 @@ class AppDownloadFilesCreate extends Command
                 'slug' => 'instructions-booking',
                 'url' => 'instructions-booking.pdf',
             ],
+            [
+                'slug' => 'vacancies',
+                'url' => 'instructions-booking.pdf',
+            ],
         ]);
     }
 }

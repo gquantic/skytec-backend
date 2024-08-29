@@ -50,7 +50,7 @@ class VacationDocumentListLayout extends Table
                 ->render(function (VacationApplicationDocument $document) {
                     return Link::make('Редактировать')
                         ->target('blank')
-                        ->route('platform.documents.edit', $document->id);
+                        ->route('platform.vacation-documents.edit', $document->id);
                 }),
             TD::make('')
                 ->width(60)

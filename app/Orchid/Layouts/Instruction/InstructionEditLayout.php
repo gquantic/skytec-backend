@@ -3,6 +3,7 @@
 namespace App\Orchid\Layouts\Instruction;
 
 use Orchid\Screen\Field;
+use Orchid\Screen\Fields\Attach;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\Upload;
@@ -29,10 +30,9 @@ class InstructionEditLayout extends Rows
                 ->title('Название')
                 ->type('text'),
 
-            Upload::make('document.attachment')
-                ->title('Файл')
-                ->closeOnAdd()
-                ->media(),
+            Attach::make('document.attachment')
+                ->value('document.attachment')
+                ->title('Файл'),
         ];
     }
 }
