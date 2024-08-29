@@ -56,7 +56,7 @@ class VacationDocumentListLayout extends Table
                 ->width(60)
                 ->render(function (VacationApplicationDocument $document) {
                     return Button::make('Удалить')
-                        ->method('remove', ['document' => $document]);
+                        ->method('remove', ['document' => $document->id]);
                 }),
         ];
     }
