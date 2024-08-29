@@ -53,7 +53,7 @@ class InstructionListLayout extends Table
                 ->width(60)
                 ->render(function (Instruction $instruction) {
                     return Button::make('Удалить')
-                        ->method('remove', ['document' => $instruction]);
+                        ->method('remove', ['document' => $instruction->id]);
                 }),
         ];
     }

@@ -55,7 +55,7 @@ class DocumentListLayout extends Table
                 ->width(60)
                 ->render(function (Document $document) {
                     return Button::make('Удалить')
-                        ->method('remove', ['document' => $document]);
+                        ->method('remove', ['document' => $document->id]);
                 }),
         ];
     }
