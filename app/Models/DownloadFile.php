@@ -31,7 +31,7 @@ class DownloadFile extends Model
 
     public function attachment(): \Illuminate\Database\Eloquent\Builder|array|\Illuminate\Database\Eloquent\Collection|Model|false
     {
-        return Attachment::query()->find($this->url[0] ?? 0) ?? false;
+        return Attachment::query()->orderByDesc('created_at')->find($this->url[0] ?? 0) ?? false;
     }
 
     private function getDownloadLink(): string

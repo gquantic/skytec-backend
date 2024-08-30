@@ -21,7 +21,7 @@ class Document extends Model
 
     public function attachment(): \Illuminate\Database\Eloquent\Builder|array|\Illuminate\Database\Eloquent\Collection|Model|false
     {
-        return Attachment::query()->find($this->attachment[0] ?? 0) ?? false;
+        return Attachment::query()->orderByDesc('created_at')->find($this->attachment[0] ?? 0) ?? false;
     }
 
     public function getDocumentAttribute()
