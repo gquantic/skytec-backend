@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\DownloadFile;
 
+use App\Events\FileSystemUploaded;
 use App\Models\DownloadFile;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
@@ -77,6 +78,8 @@ class DownloadFileEditScreen extends Screen
 //        $data['url'] = $attachment->url();
 
         $file->update($data);
+
+        Event(new FileSystemUploaded());
 
         Toast::info('Файл успешно добавлен.');
         return redirect()->route('platform.download-files.list');

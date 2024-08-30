@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Instruction;
 
+use App\Events\FileSystemUploaded;
 use App\Models\Documents\Document;
 use App\Models\Documents\Instruction;
 use App\Models\Documents\VacationApplicationDocument;
@@ -68,6 +69,7 @@ class InstructionCreateScreen extends Screen
         $data['show'] = true;
 
         Instruction::query()->create($data);
+        Event(new FileSystemUploaded());
 
         Toast::info('Документ успешно добавлен.');
         return redirect()->route('platform.instructions.list');

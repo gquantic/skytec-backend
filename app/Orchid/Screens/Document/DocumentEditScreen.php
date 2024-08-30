@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\Document;
 
+use App\Events\FileSystemUploaded;
 use App\Models\Documents\Document;
 use App\Orchid\Layouts\Document\DocumentCreateLayout;
 use Illuminate\Http\Request;
@@ -66,6 +67,7 @@ class DocumentEditScreen extends Screen
         $data = $request->collect('document')->toArray();
 
         $document->update($data);
+        Event(new FileSystemUploaded());
 
         Toast::info('Документ успешно добавлен.');
         return redirect()->route('platform.documents.list');

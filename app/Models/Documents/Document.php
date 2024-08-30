@@ -32,7 +32,7 @@ class Document extends Model
         }
 
         return Storage::disk('public')->url(
-            $attachment->path . $attachment->name . '.' . $attachment->extension
+            $attachment->path . $attachment->name
         );
     }
 }

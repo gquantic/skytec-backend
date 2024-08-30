@@ -2,12 +2,14 @@
 
 namespace App\Orchid\Screens\Instruction;
 
+use App\Events\FileSystemUploaded;
 use App\Models\Documents\Document;
 use App\Models\Documents\Instruction;
 use App\Models\Documents\VacationApplicationDocument;
 use App\Orchid\Layouts\Document\DocumentCreateLayout;
 use App\Orchid\Layouts\Instruction\InstructionEditLayout;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Event;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
 use Orchid\Support\Facades\Toast;
@@ -69,6 +71,8 @@ class InstructionEditScreen extends Screen
         $data = $request->collect('document')->toArray();
 
         $document->update($data);
+
+        Event(new FileSystemUploaded());
 
         Toast::info('Документ успешно добавлен.');
         return redirect()->route('platform.instructions.list');

@@ -2,6 +2,7 @@
 
 namespace App\Orchid\Screens\VacationApplicationDocument;
 
+use App\Events\FileSystemUploaded;
 use App\Models\Documents\Document;
 use App\Models\Documents\VacationApplicationDocument;
 use App\Orchid\Layouts\Document\DocumentCreateLayout;
@@ -66,6 +67,7 @@ class VacationDocumentCreateScreen extends Screen
         $data['show'] = true;
 
         VacationApplicationDocument::query()->create($data);
+        Event(new FileSystemUploaded());
 
         Toast::info('Документ успешно добавлен.');
         return redirect()->route('platform.vacation-documents.list');
