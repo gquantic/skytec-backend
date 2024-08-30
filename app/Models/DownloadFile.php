@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Orchid\Attachment\Models\Attachment;
 
 class DownloadFile extends Model
@@ -28,10 +29,20 @@ class DownloadFile extends Model
         );
     }
 
+    public function attachment(): \Illuminate\Database\Eloquent\Builder|array|\Illuminate\Database\Eloquent\Collection|Model|false
+    {
+        return Attachment::query()->find($this->url[0] ?? 0) ?? false;
+    }
+
     private function getDownloadLink(): string
     {
-        if ($file = Attachment::query()->where('id', $this->url[0] ?? [])->first()) {
-            return $file->url();
-        } else return '';
+        $attachment = $this->attachment();
+        if (!$attachment) {
+            return false;
+        }
+
+        return Storage::disk('public')->url(
+            $attachment->path . $attachment->name
+        );
     }
 }
