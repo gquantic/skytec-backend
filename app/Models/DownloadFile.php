@@ -29,9 +29,13 @@ class DownloadFile extends Model
         );
     }
 
-    public function attachment(): \Illuminate\Database\Eloquent\Builder|array|\Illuminate\Database\Eloquent\Collection|Model|false
+    public function attachment()
     {
-        return Attachment::query()->orderByDesc('created_at')->find($this->url[0] ?? 0) ?? false;
+        if (is_array($this->url)) {
+            return Attachment::query()->orderByDesc('created_at')->find($this->url[0] ?? 0) ?? false;
+        } else {
+            return Attachment::query()->orderByDesc('created_at')->find($this->url ?? 0) ?? false;
+        }
     }
 
     private function getDownloadLink(): string

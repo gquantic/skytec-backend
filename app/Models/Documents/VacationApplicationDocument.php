@@ -19,9 +19,13 @@ class VacationApplicationDocument extends Model
 
     protected $guarded = [];
 
-    public function attachment(): \Illuminate\Database\Eloquent\Builder|array|\Illuminate\Database\Eloquent\Collection|Model|false
+    public function attachment()
     {
-        return Attachment::query()->orderByDesc('created_at')->find($this->attachment[0] ?? 0) ?? false;
+        if (is_array($this->attachment)) {
+            return Attachment::query()->orderByDesc('created_at')->find($this->attachment[0] ?? 0) ?? false;
+        } else {
+            return Attachment::query()->orderByDesc('created_at')->find($this->attachment ?? 0) ?? false;
+        }
     }
 
     public function getDocumentAttribute()
