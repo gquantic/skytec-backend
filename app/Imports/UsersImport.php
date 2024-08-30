@@ -58,7 +58,7 @@ class UsersImport implements ToCollection
 
             //dd($ldapUser->getFirstAttribute('sAMAccountName'));
 
-            $explodedName = explode(' ', $row[$this->cells['fio']]);
+            $explodedName = explode(' ', trim($row[$this->cells['fio']]));
 
             $headId = null;
 
@@ -77,8 +77,8 @@ class UsersImport implements ToCollection
                 'name' => trim($row[$this->cells['fio']]),
                 'login' => $ldapUser->getFirstAttribute('sAMAccountName'),
                 'firstname' => $explodedName[0] ?? '',
-                'lastname' => $explodedName[1] ?? '',
-                'surname' => $explodedName[2] ?? '',
+                'lastname' => strlen($explodedName[1]) > 3 ? $explodedName[1] : $explodedName[2],
+                'surname' => '',
                 'password' => Hash::make(Str::random(8)),
                 'position' => trim($row[$this->cells['position']]),
                 'is_director' => $isDirector,
