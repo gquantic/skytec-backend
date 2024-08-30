@@ -32,12 +32,21 @@ class RenameUploadedFiles extends Command
 
         foreach ($attachments as $attachment) {
 //            dd($attachment->path . $attachment->name . '.' . $attachment->extension);
-            Storage::disk('public')->move(
-                $attachment->path . $attachment->name . '.' . $attachment->extension,
-                $attachment->path . $attachment->original_name,
-            );
+            $newName = $attachment->path . "{$attachment->id}_" . $attachment->original_name;
 
-            $attachment->name = $attachment->original_name;
+            if (Storage::disk('public')->exists($attachment->path . $attachment->name . '.' . $attachment->extension)) {
+                Storage::disk('public')->move(
+                    $attachment->path . $attachment->name . '.' . $attachment->extension,
+                    $newName,
+                );
+            } else {
+                Storage::disk('public')->move(
+                    $attachment->path . $attachment->name,
+                    $newName,
+                );
+            }
+
+            $attachment->name = "{$attachment->id}_" . $attachment->original_name;
             $attachment->save();
         }
     }
