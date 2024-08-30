@@ -2,6 +2,8 @@
 
 namespace App\Orchid\Layouts\Document;
 
+use App\Models\Documents\Document;
+use App\Orchid\Fields\UploadFile;
 use Orchid\Screen\Field;
 use Orchid\Screen\Fields\Attach;
 use Orchid\Screen\Fields\CheckBox;
@@ -36,7 +38,7 @@ class DocumentCreateLayout extends Rows
                 ->required()
                 ->type('text'),
 
-            Upload::make('document.attachment')
+            UploadFile::make('document.attachment')
                 ->title('Файл'),
 
 //            CheckBox::make('document.show')

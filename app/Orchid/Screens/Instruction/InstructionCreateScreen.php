@@ -8,6 +8,7 @@ use App\Models\Documents\Instruction;
 use App\Models\Documents\VacationApplicationDocument;
 use App\Orchid\Layouts\Document\DocumentCreateLayout;
 use App\Orchid\Layouts\Instruction\InstructionEditLayout;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -68,8 +69,18 @@ class InstructionCreateScreen extends Screen
         $data = $request->collect('document')->toArray();
         $data['show'] = true;
 
+        if (isset($request->document['attachment'])) {
+            $file = $request->document['attachment'];
+            $fileService = new FileService();
+
+            $fileName = $fileService->uploadFile($file);
+
+            $data['attachment'] = $fileName;
+        } else {
+            $data['attachment'] = '';
+        }
+
         Instruction::query()->create($data);
-        Event(new FileSystemUploaded());
 
         Toast::info('Документ успешно добавлен.');
         return redirect()->route('platform.instructions.list');

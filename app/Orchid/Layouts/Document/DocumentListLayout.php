@@ -41,7 +41,7 @@ class DocumentListLayout extends Table
                 ->render(function (Document $document) {
                     return Link::make('Перейти к файлу')
                         ->target('blank')
-                        ->href($document->document);
+                        ->href($document->attachment);
                 }),
 
             TD::make('')

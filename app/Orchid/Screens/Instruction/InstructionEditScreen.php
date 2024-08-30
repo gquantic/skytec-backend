@@ -8,6 +8,7 @@ use App\Models\Documents\Instruction;
 use App\Models\Documents\VacationApplicationDocument;
 use App\Orchid\Layouts\Document\DocumentCreateLayout;
 use App\Orchid\Layouts\Instruction\InstructionEditLayout;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Event;
 use Orchid\Screen\Actions\Button;
@@ -70,9 +71,18 @@ class InstructionEditScreen extends Screen
     {
         $data = $request->collect('document')->toArray();
 
-        $document->update($data);
+        if (isset($request->document['attachment'])) {
+            $file = $request->document['attachment'];
+            $fileService = new FileService();
 
-        Event(new FileSystemUploaded());
+            $fileName = $fileService->uploadFile($file);
+
+            $data['attachment'] = $fileName;
+        } else {
+            $data['attachment'] = '';
+        }
+
+        $document->update($data);
 
         Toast::info('Документ успешно добавлен.');
         return redirect()->route('platform.instructions.list');

@@ -5,6 +5,7 @@ namespace App\Orchid\Screens\Document;
 use App\Events\FileSystemUploaded;
 use App\Models\Documents\Document;
 use App\Orchid\Layouts\Document\DocumentCreateLayout;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -66,8 +67,18 @@ class DocumentEditScreen extends Screen
     {
         $data = $request->collect('document')->toArray();
 
+        if (isset($request->document['attachment'])) {
+            $file = $request->document['attachment'];
+            $fileService = new FileService();
+
+            $fileName = $fileService->uploadFile($file);
+
+            $data['attachment'] = $fileName;
+        } else {
+            $data['attachment'] = '';
+        }
+
         $document->update($data);
-        Event(new FileSystemUploaded());
 
         Toast::info('Документ успешно добавлен.');
         return redirect()->route('platform.documents.list');

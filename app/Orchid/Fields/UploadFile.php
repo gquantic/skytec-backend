@@ -26,7 +26,6 @@ class UploadFile extends Field
     protected $attributes = [
         'title' => 'Загрузка файла',
         'help' => '',
-        'value' => '',
     ];
 
     /**

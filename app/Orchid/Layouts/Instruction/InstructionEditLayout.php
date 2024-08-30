@@ -31,7 +31,7 @@ class InstructionEditLayout extends Rows
                 ->title('Название')
                 ->type('text'),
 
-            Upload::make('document.attachment')
+            UploadFile::make('document.attachment')
                 ->title('Файл'),
         ];
     }

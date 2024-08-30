@@ -13,7 +13,6 @@ class DownloadFile extends Model
     use HasFactory;
 
     protected $casts = [
-        'url' => 'array'
     ];
 
     protected $appends = [
@@ -22,31 +21,8 @@ class DownloadFile extends Model
 
     protected $guarded = [];
 
-    public function download(): Attribute
+    public function getDocumentAttribute()
     {
-        return Attribute::make(
-            get: fn ($value) => $this->getDownloadLink()
-        );
-    }
-
-    public function attachment()
-    {
-        if (is_array($this->url)) {
-            return Attachment::query()->orderByDesc('created_at')->find($this->url[0] ?? 0) ?? false;
-        } else {
-            return Attachment::query()->orderByDesc('created_at')->find($this->url ?? 0) ?? false;
-        }
-    }
-
-    private function getDownloadLink(): string
-    {
-        $attachment = $this->attachment();
-        if (!$attachment) {
-            return false;
-        }
-
-        return Storage::disk('public')->url(
-            $attachment->path . $attachment->name
-        );
+        return $this->url;
     }
 }

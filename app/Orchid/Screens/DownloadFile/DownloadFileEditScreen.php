@@ -4,6 +4,7 @@ namespace App\Orchid\Screens\DownloadFile;
 
 use App\Events\FileSystemUploaded;
 use App\Models\DownloadFile;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Fields\Input;
@@ -77,9 +78,18 @@ class DownloadFileEditScreen extends Screen
 //        $attachment = Attachment::query()->find($data['url'][0]);
 //        $data['url'] = $attachment->url();
 
-        $file->update($data);
+        if (isset($request->document['attachment'])) {
+            $file = $request->document['attachment'];
+            $fileService = new FileService();
 
-        Event(new FileSystemUploaded());
+            $fileName = $fileService->uploadFile($file);
+
+            $data['url'] = $fileName;
+        } else {
+            $data['url'] = '';
+        }
+
+        $file->update($data);
 
         Toast::info('Файл успешно добавлен.');
         return redirect()->route('platform.download-files.list');

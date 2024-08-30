@@ -6,6 +6,7 @@ use App\Events\FileSystemUploaded;
 use App\Models\Documents\Document;
 use App\Models\Documents\VacationApplicationDocument;
 use App\Orchid\Layouts\Document\DocumentCreateLayout;
+use App\Services\FileService;
 use Illuminate\Http\Request;
 use Orchid\Screen\Actions\Button;
 use Orchid\Screen\Screen;
@@ -66,8 +67,18 @@ class VacationDocumentCreateScreen extends Screen
         $data = $request->collect('document')->toArray();
         $data['show'] = true;
 
+        if (isset($request->document['attachment'])) {
+            $file = $request->document['attachment'];
+            $fileService = new FileService();
+
+            $fileName = $fileService->uploadFile($file);
+
+            $data['attachment'] = $fileName;
+        } else {
+            $data['attachment'] = '';
+        }
+
         VacationApplicationDocument::query()->create($data);
-        Event(new FileSystemUploaded());
 
         Toast::info('Документ успешно добавлен.');
         return redirect()->route('platform.vacation-documents.list');
