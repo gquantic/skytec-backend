@@ -36,8 +36,7 @@ class DocumentCreateLayout extends Rows
                 ->required()
                 ->type('text'),
 
-            Attach::make('document.attachment')
-                ->value('document.attachment')
+            Upload::make('document.attachment')
                 ->title('Файл'),
 
 //            CheckBox::make('document.show')
