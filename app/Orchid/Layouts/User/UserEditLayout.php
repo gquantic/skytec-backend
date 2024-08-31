@@ -15,6 +15,7 @@ use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\Select;
+use Orchid\Screen\Fields\TextArea;
 use Orchid\Screen\Layouts\Rows;
 
 class UserEditLayout extends Rows
@@ -42,13 +43,6 @@ class UserEditLayout extends Rows
                     ->required()
                     ->title(__('Имя'))
                     ->placeholder(__('Имя')),
-
-                Input::make('user.surname')
-                    ->type('text')
-                    ->max(255)
-                    ->required()
-                    ->title(__('Отчество'))
-                    ->placeholder(__('Отчество')),
             ]),
 
             Input::make('user.email')
@@ -81,7 +75,6 @@ class UserEditLayout extends Rows
             Input::make('user.phone')
                 ->type('text')
                 ->max(255)
-                ->required()
                 ->title(__('Телефон'))
                 ->placeholder(__('Телефон')),
 
@@ -95,6 +88,10 @@ class UserEditLayout extends Rows
 
             CheckBox::make('user.hide_phone')
                 ->title('Скрыть телефон'),
+
+            TextArea::make('user.description')
+                ->title('Описание о пользователе')
+                ->rows(4),
         ];
     }
 }
