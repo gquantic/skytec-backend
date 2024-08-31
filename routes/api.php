@@ -37,6 +37,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/search', 'App\Http\Controllers\Api\SearchController@search');
 
     Route::get('/departments/{company}', 'App\Http\Controllers\Api\DepartmentController@getDepartments');
+    Route::get('/key-persons', 'App\Http\Controllers\Api\DepartmentController@getKeyPersons');
 
     Route::prefix('birthdays')->group(function () {
         Route::get('/', 'App\Http\Controllers\Api\User\UserBirthdayController@index');
