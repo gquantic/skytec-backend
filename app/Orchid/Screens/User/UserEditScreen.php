@@ -149,7 +149,7 @@ class UserEditScreen extends Screen
     /**
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(User $user, Request $request)
+    public function save(\App\Models\User $user, Request $request)
     {
         $request->validate([
             'user.email' => [
@@ -167,8 +167,11 @@ class UserEditScreen extends Screen
             $builder->getModel()->password = Hash::make($request->input('user.password'));
         });
 
+        foreach ($request->collect('user')->except(['password', 'permissions', 'roles'])->toArray() as $key => $value) {
+            $user->$key = $value;
+        }
+
         $user
-            ->fill($request->collect('user')->except(['password', 'permissions', 'roles'])->toArray())
             ->forceFill(['permissions' => $permissions])
             ->save();
 
@@ -184,7 +187,7 @@ class UserEditScreen extends Screen
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function remove(User $user)
+    public function remove(\App\Models\User $user)
     {
         $user->delete();
 
@@ -196,7 +199,7 @@ class UserEditScreen extends Screen
     /**
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function loginAs(User $user)
+    public function loginAs(\App\Models\User $user)
     {
         Impersonation::loginAs($user);
 
