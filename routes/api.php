@@ -10,6 +10,9 @@ Route::prefix('user')->group(function () {
     Route::post('/register', 'App\Http\Controllers\Api\AuthController@register');
 });
 
+Route::get('/links/top', 'App\Http\Controllers\Api\Menu\MenuItemController@top');
+Route::get('/links/left', 'App\Http\Controllers\Api\Menu\MenuItemController@left');
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/documents/{company}', 'App\Http\Controllers\Api\DocumentController@index');
     Route::get('/vacations/{company}', 'App\Http\Controllers\Api\DocumentController@vacations');
@@ -18,9 +21,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/pages', 'App\Http\Controllers\Api\Content\PageController@index');
     Route::get('/pages/{page:url}', 'App\Http\Controllers\Api\Content\PageController@show');
-
-    Route::get('/links/top', 'App\Http\Controllers\Api\Menu\MenuItemController@top');
-    Route::get('/links/left', 'App\Http\Controllers\Api\Menu\MenuItemController@left');
 
     Route::post('/invite-friend', 'App\Http\Controllers\Api\InviteFriendController@store');
     Route::post('/user-create', 'App\Http\Controllers\Api\InviteFriendController@createRequest');
