@@ -16,7 +16,11 @@ class ArticleController extends Controller
      */
     public function index(Request $request)
     {
-        $articles = Article::query()->where('active', true)->orderByDesc('created_at')->with('user');
+        $articles = Article::query()
+            ->where('active', true)
+            ->where('moderated', true)
+            ->orderByDesc('created_at')
+            ->with('user');
 
         if ($request->has('user_id')) {
             $articles->where('user_id', $request->get('user_id'));
