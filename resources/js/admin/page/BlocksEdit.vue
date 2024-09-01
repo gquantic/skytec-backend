@@ -67,6 +67,7 @@ export default {
                 services: 'Услуги',
                 structure: 'Структура компании',
                 vacancies: 'Вакансии',
+                referal: 'Реферальная программа',
                 text: 'Текстовый блок',
             }
         } else {
