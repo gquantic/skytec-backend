@@ -17,10 +17,15 @@ class DepartmentController extends Controller
             ->get();
     }
 
-    public function getKeyPersons()
+    public function getKeyPersons($company = false)
     {
-        return User::query()
-            ->where('is_director', true)
-            ->get();
+        $user = User::query()
+            ->where('is_director', true);
+
+        if ($company) {
+            $user->where('company', $company);
+        }
+
+        return $user->get();
     }
 }
