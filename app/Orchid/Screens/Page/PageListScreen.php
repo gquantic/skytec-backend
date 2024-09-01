@@ -3,6 +3,7 @@
 namespace App\Orchid\Screens\Page;
 
 use App\Models\Page\Page;
+use App\Services\Admin\FormInterfaceService;
 use Orchid\Screen\Actions\Link;
 use Orchid\Screen\Screen;
 use Orchid\Screen\TD;
@@ -61,17 +62,14 @@ class PageListScreen extends Screen
     {
         return [
             Layout::table('pages', [
-                TD::make('page.title', 'Ссылка')
-                    ->render(fn (Page $page) => $page->url),
-
-                TD::make('page.menu_title', 'Название в меню')
-                    ->render(fn (Page $page) => $page->menu_title),
-
                 TD::make('page.title', 'Заголовок')
                     ->render(fn (Page $page) => $page->title),
 
                 TD::make('page.description', 'Описание')
                     ->render(fn (Page $page) => $page->description),
+
+                TD::make('page.description', 'Меню на странице')
+                    ->render(fn (Page $page) => FormInterfaceService::checkIcon($page->left_menu)),
 
                 TD::make('page.edit', 'Редактирование')
                     ->render(function (Page $page) {

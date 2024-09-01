@@ -89,7 +89,6 @@ class PageCreateScreen extends Screen
         $center = $request->collect('page_center')->toArray() ?? [];
         $right = $request->collect('page_right')->toArray() ?? [];
         $page['active'] = false;
-        $page['url'] = $page['url'] ?? Str::slug($page['menu_title'] . ' ' . time());
 
         $pageModel = new Page();
 
@@ -110,11 +109,11 @@ class PageCreateScreen extends Screen
     public function publish(Request $request)
     {
         $page = $request->collect('page')->toArray();
-        $left = $request->collect('page_left')->toArray() ?? [];
-        $center = $request->collect('page_center')->toArray() ?? [];
-        $right = $request->collect('page_right')->toArray() ?? [];
+        $blocks = $request->collect('blocks')->toArray();
+        $left = json_decode($blocks['left'], true) ?? [];
+        $center = json_decode($blocks['center'], true) ?? [];
+        $right = json_decode($blocks['right'], true) ?? [];
         $page['active'] = true;
-        $page['url'] = $page['url'] ?? Str::slug($page['menu_title'] . ' ' . time());
 
         $pageModel = new Page();
 
