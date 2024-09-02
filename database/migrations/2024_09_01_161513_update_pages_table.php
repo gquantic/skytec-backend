@@ -12,17 +12,6 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('pages', function (Blueprint $table) {
-            $table->dropColumn('menu_title');
-            $table->dropColumn('url');
-        });
-    }
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::table('pages', function (Blueprint $table) {
             $table->string('menu_title')->nullable();
             $table->string('url')->nullable();
         });
