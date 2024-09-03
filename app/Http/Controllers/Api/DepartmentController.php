@@ -20,7 +20,8 @@ class DepartmentController extends Controller
     public function getKeyPersons($company = false)
     {
         $user = User::query()
-            ->where('is_director', true);
+            ->where('is_director', true)
+            ->orderByDesc('sort');
 
         if ($company) {
             $user->where('company', $company);
