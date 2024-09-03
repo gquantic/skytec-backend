@@ -29,16 +29,14 @@ class SearchController extends Controller
 
         $users = User::query()->with(['manager', 'department']);
 
-        if (count($search) > 2) {
-            $users->where('surname', 'like', "{$search[0]}%")
-                ->where('firstname', 'like', "{$search[1]}%")
-                ->where('lastname', 'like', "{$search[2]}%")
+        if (count($search) >= 2) {
+            $users->where('firstname', 'like', "{$search[0]}%")
+                ->where('lastname', 'like', "{$search[1]}%")
                 ->orWhere('phone', $request->get('search'))
                 ->orWhere('email', $request->get('search'));
         } else {
             $users->where('firstname', 'like', "{$search[0]}%")
                 ->orWhere('lastname', 'like', "{$search[0]}%")
-                ->orWhere('surname', 'like', "{$search[0]}%")
                 ->orWhere('phone', $request->get('search'))
                 ->orWhere('email', $request->get('search'));
         }
