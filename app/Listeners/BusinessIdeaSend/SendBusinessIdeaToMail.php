@@ -4,6 +4,7 @@ namespace App\Listeners\BusinessIdeaSend;
 
 use App\Events\BusinessIdeaSend;
 use App\Mail\BusinessIdeaMail;
+use App\Services\MailService;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Mail;
@@ -23,6 +24,8 @@ class SendBusinessIdeaToMail
      */
     public function handle(BusinessIdeaSend $event): void
     {
-        Mail::to(config('skytec.mails'))->send(new BusinessIdeaMail($event->businessIdea));
+        Mail::to(
+            MailService::getMailAddresses('business_idea')
+        )->send(new BusinessIdeaMail($event->businessIdea));
     }
 }
