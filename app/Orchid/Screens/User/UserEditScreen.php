@@ -171,6 +171,10 @@ class UserEditScreen extends Screen
         $data = $request->collect('user')->except(['password', 'permissions', 'roles'])->toArray();
         $data['birthdate'] = Carbon::parse($data['birthdate'])->format('Y-m-d');
 
+        if ($data['avatar'] == null) {
+            unset($data['avatar']);
+        }
+
         foreach ($data as $key => $value) {
             $user->$key = $value;
         }
