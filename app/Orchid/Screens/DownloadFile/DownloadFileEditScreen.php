@@ -66,6 +66,7 @@ class DownloadFileEditScreen extends Screen
                 Upload::make('file.url')
                     ->title('Файл')
                     ->media()
+                    ->maxFiles(1)
                     ->closeOnAdd(),
             ])
         ];
@@ -78,15 +79,19 @@ class DownloadFileEditScreen extends Screen
 //        $attachment = Attachment::query()->find($data['url'][0]);
 //        $data['url'] = $attachment->url();
 
-        if (isset($request->document['attachment'])) {
-            $file = $request->document['attachment'];
+        foreach ($data['url'] as $key => $value) {
+            if ($value == 'undefined') {
+                unset($data['url'][$key]);
+            } else {
+                $data['url'][0] = $value;
+            }
+        }
+
+        if (isset($data['url']) && is_array($data['url']) && count($data['url']) > 0) {
+            $uploadFile = $data['url'];
             $fileService = new FileService();
 
-            $fileName = $fileService->uploadFile($file);
-
-            $data['url'] = $fileName;
-        } else {
-            $data['url'] = '';
+            $data['url'] = $fileService->reUploadOrchidFile($data['slug'], $data['url']);
         }
 
         $file->update($data);

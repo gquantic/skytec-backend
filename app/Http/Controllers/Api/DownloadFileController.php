@@ -12,9 +12,6 @@ class DownloadFileController extends Controller
 {
     public function download(DownloadFile $download)
     {
-//        $file = File::get($downloadFile->);
-//        $response = response()->make($file, 200);
-//        $response->header('Content-Type', 'application/pdf');
         return $download;
     }
 }

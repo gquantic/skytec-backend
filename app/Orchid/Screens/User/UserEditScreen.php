@@ -10,6 +10,7 @@ use App\Orchid\Layouts\User\UserPasswordLayout;
 use App\Orchid\Layouts\User\UserRoleLayout;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\Impersonation;
@@ -167,7 +168,10 @@ class UserEditScreen extends Screen
             $builder->getModel()->password = Hash::make($request->input('user.password'));
         });
 
-        foreach ($request->collect('user')->except(['password', 'permissions', 'roles'])->toArray() as $key => $value) {
+        $data = $request->collect('user')->except(['password', 'permissions', 'roles'])->toArray();
+        $data['birthdate'] = Carbon::parse($data['birthdate'])->format('Y-m-d');
+
+        foreach ($data as $key => $value) {
             $user->$key = $value;
         }
 

@@ -13,6 +13,7 @@ use Orchid\Screen\Fields\DateRange;
 use Orchid\Screen\Fields\DateTimer;
 use Orchid\Screen\Fields\Group;
 use Orchid\Screen\Fields\Input;
+use Orchid\Screen\Fields\Picture;
 use Orchid\Screen\Fields\Relation;
 use Orchid\Screen\Fields\Select;
 use Orchid\Screen\Fields\TextArea;
@@ -28,6 +29,8 @@ class UserEditLayout extends Rows
     public function fields(): array
     {
         return [
+            Picture::make('user.avatar')
+                ->storage('public'),
 
             Group::make([
                 Input::make('user.firstname')
@@ -87,7 +90,14 @@ class UserEditLayout extends Rows
                 ->title('Дата рождения'),
 
             CheckBox::make('user.hide_phone')
-                ->title('Скрыть телефон'),
+                ->placeholder('Скрыть телефон'),
+
+            CheckBox::make('user.is_director')
+                ->value(true)
+                ->placeholder('Директор'),
+
+            Select::make('user.company')
+                ->options(config('structure.companies')),
 
             TextArea::make('user.description')
                 ->title('Описание о пользователе')

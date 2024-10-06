@@ -21,8 +21,13 @@ class DownloadFile extends Model
 
     protected $guarded = [];
 
-    public function getDocumentAttribute()
+//    public function getDocumentAttribute()
+//    {
+//        return $this->url;
+//    }
+
+    public function getDownloadAttribute()
     {
-        return $this->url;
+        return Storage::disk('public')->url($this->url);
     }
 }

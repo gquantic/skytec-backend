@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Attachment;
 use Carbon\Carbon;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -21,5 +22,20 @@ class FileService
         $file->storeAs('public/files/'. $fileName);
 
         return Storage::disk('public')->url('files/'. $fileName);
+    }
+
+    public function reUploadOrchidFile($fileName, $file)
+    {
+        $file = Attachment::query()->find($file[0]);
+        $newFileName = $file->path . rand(999, 99999) . '_' . Str::slug($file->original_name, '_') . '.' . $file->extension;
+
+        Storage::disk($file->disk)->move(
+            $file->path . $file->name . '.' . $file->extension,
+            $newFileName
+        );
+
+        $file->delete();
+
+        return $newFileName;
     }
 }
