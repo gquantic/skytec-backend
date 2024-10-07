@@ -99,6 +99,12 @@ class UserEditLayout extends Rows
                     true => 'Директор',
                 ]),
 
+            Input::make('user.sort')
+                ->type('number')
+                ->max(255)
+                ->title(__('Телефон'))
+                ->placeholder(__('Телефон')),
+
             Select::make('user.company')
                 ->options(config('structure.companies')),
 

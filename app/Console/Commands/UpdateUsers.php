@@ -35,6 +35,6 @@ class UpdateUsers extends Command
         }
 
         // Удаляем отсутствующих пользователей
-        (new UserService())->clearUsers();
+//        (new UserService())->clearUsers();
     }
 }
