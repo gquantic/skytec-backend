@@ -102,8 +102,8 @@ class UserEditLayout extends Rows
             Input::make('user.sort')
                 ->type('number')
                 ->max(255)
-                ->title(__('Телефон'))
-                ->placeholder(__('Телефон')),
+                ->title(__('Сортировка'))
+                ->placeholder(__('0')),
 
             Select::make('user.company')
                 ->options(config('structure.companies')),
