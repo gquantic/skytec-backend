@@ -28,7 +28,7 @@ class UpdateUsers extends Command
      */
     public function handle()
     {
-        if (config('app.import') == 'production') {
+        if (config('app.env') == 'production') {
             Excel::import(new UsersImport, '/mnt/share/Company_structure.xlsx');
         } else {
             Excel::import(new UsersImport, public_path('Company_structure.xlsx'));
