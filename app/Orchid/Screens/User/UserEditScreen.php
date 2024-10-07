@@ -11,6 +11,7 @@ use App\Orchid\Layouts\User\UserRoleLayout;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Orchid\Access\Impersonation;
@@ -34,7 +35,7 @@ class UserEditScreen extends Screen
      *
      * @return array
      */
-    public function query(User $user): iterable
+    public function query(\App\Models\User $user): iterable
     {
         $user->load(['roles']);
 
@@ -169,11 +170,15 @@ class UserEditScreen extends Screen
         });
 
         $data = $request->collect('user')->except(['password', 'permissions', 'roles'])->toArray();
+
         $data['birthdate'] = Carbon::parse($data['birthdate'])->format('Y-m-d');
+        $data['employment_date'] = Carbon::parse($data['employment_date'])->format('Y-m-d');
+        $data['is_director'] = boolval($data['is_director']);
 
         if ($data['avatar'] == null) {
             unset($data['avatar']);
         }
+
 
         foreach ($data as $key => $value) {
             $user->$key = $value;
@@ -183,11 +188,13 @@ class UserEditScreen extends Screen
             ->forceFill(['permissions' => $permissions])
             ->save();
 
+        Artisan::call('cache:clear');
+
         $user->replaceRoles($request->input('user.roles'));
 
         Toast::info(__('User was saved.'));
 
-        return redirect()->route('platform.systems.users');
+//        return redirect()->route('platform.systems.users');
     }
 
     /**

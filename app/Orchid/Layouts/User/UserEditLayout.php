@@ -92,9 +92,12 @@ class UserEditLayout extends Rows
             CheckBox::make('user.hide_phone')
                 ->placeholder('Скрыть телефон'),
 
-            CheckBox::make('user.is_director')
-                ->value(true)
-                ->placeholder('Директор'),
+            Select::make('user.is_director')
+                ->title('Тип')
+                ->options([
+                    false => 'Сотрудник',
+                    true => 'Директор',
+                ]),
 
             Select::make('user.company')
                 ->options(config('structure.companies')),
