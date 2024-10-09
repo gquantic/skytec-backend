@@ -98,12 +98,12 @@ class User extends Authenticatable implements LdapAuthenticatable
 
     public function getEmploymentDateAttribute($value): string
     {
-        return Carbon::parse($value)->format('d.m.Y');
+        return $value != '' ? Carbon::parse($value)->format('d.m.Y') : '';
     }
 
     public function getBirthdateAttribute($value): string
     {
-        return Carbon::parse($value)->format('d.m.Y');
+        return $value != '' ? Carbon::parse($value)->format('d.m.Y') : '';
     }
 
     public function name(): Attribute

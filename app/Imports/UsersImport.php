@@ -93,17 +93,23 @@ class UsersImport implements ToCollection
                 ], [])->id;
             }
 
-            $localUser = LocalUser::query()->firstOrNew([
-                'email' => trim($row[$this->cells['email']])
-            ]);
+            $localUser = LocalUser::query()->where('email', trim($row[$this->cells['email']]));
 
-            foreach ($data as $key => $value) {
-                $localUser->$key = $value;
+//            $localUser = LocalUser::query()->firstOrNew([
+//                'email' => trim($row[$this->cells['email']])
+//            ]);
+
+            if ($localUser = $localUser->first()) {
+                foreach ($data as $key => $value) {
+                    $localUser->$key = $value;
+                }
+
+                $localUser->save();
+            } else {
+                continue;
             }
 
-            $localUser->save();
-
-            //echo "User {$data['name']} imported \n\n";
+            echo "User {$data['name']} imported \n\n";
         }
     }
 
