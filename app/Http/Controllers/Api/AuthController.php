@@ -32,59 +32,23 @@ class AuthController extends Controller
         $credentials = $request->only('login', 'password');
         $credentials['login'] = Str::lower($credentials['login']);
 
-        // Проверяем наличие пользователя в локальной базе данных
-        if (
-          //  false
-            $user = User::query()->where('login', $credentials['login'])->first() //&& config('app.debug') === 'local'
-        ) {
-            // Проверяем пароль в локальной базе данных
-            if (Hash::check($credentials['password'], $user->password)) {
-                $token = $user->createToken('auth_token')->plainTextToken;
-                return ApiService::jsonResponse([
-                    'user' => $this->userRepository->getUserData($user->id),
-                    'token' => $token,
-                    'permissions' => $user->permissions,
-                ], 200);
-            } else {
-                return ApiService::jsonResponse('Неверный пароль.', 403);
-            }
-        } else {
-            // Пытаемся аутентифицироваться через LDAP
-            $ldapUser = $this->attemptLdapAuthentication($credentials['login'], $credentials['password']);
+        // Пытаемся аутентифицироваться через LDAP
+        $ldapUser = $this->attemptLdapAuthentication($credentials['login'], $credentials['password']);
+        $user = User::query()->where('login', $credentials['login'])->first();
 
-            if ($ldapUser) {
-//                $fullName = $ldapUser->getFirstAttribute('cn');
-//                $explodedName = explode(' ', $fullName);
+        if ($ldapUser) {
+            $fullName = $ldapUser->getFirstAttribute('cn');
+            $explodedName = explode(' ', $fullName);
 
-//                $data = [
-//                    'avatar' => $this->pasteImage($ldapUser->getFirstAttribute('thumbnailphoto')),
-//                    'login' => $credentials['login'],
-//                    'email' => $ldapUser->getFirstAttribute('mail'),
-//                    'name' => $ldapUser->getFirstAttribute('cn'),
-//                    'firstname' => $explodedName[0] ?? '',
-//                    'lastname' => $explodedName[1] ?? '',
-//                    'surname' => $explodedName[2] ?? '',
-//                    'phone' => $ldapUser->getFirstAttribute('phone'),
-//                    'password' => Hash::make($credentials['password']),
-//                    'position' => $ldapUser->getFirstAttribute('title'),
-//                    'department_id' => $this->departmentRepository->firstOrCreate(['title' => $ldapUser->getFirstAttribute('department')], [])->id
-//                ];
+            $token = $user->createToken('auth_token')->plainTextToken;
 
-//              Создаем нового пользователя в локальной базе данных
-                //$user = $this->userRepository->createUser(data: $data);
-
-                if ($user = User::query()->where('email', $ldapUser->getFirstAttribute('mail'))->orWhere('login', $ldapUser->getFirstAttribute('sAMAccountName'))->first()) {
-                    $token = $user->createToken('auth_token')->plainTextToken;
-
-                    return ApiService::jsonResponse([
-                        'user' => $this->userRepository->getUserData($user->id),
-                        'token' => $token,
-                    ], 200);
-                }
-            }
-
-            return ApiService::jsonResponse('Пользователь с таким логином не найден.', 404);
+            return ApiService::jsonResponse([
+                'user' => $this->userRepository->getUserData($user->id),
+                'token' => $token,
+            ], 200);
         }
+
+        return ApiService::jsonResponse('Пользователь с таким логином не найден.', 404);
     }
 
     private function attemptLdapAuthentication($username, $password)
@@ -96,6 +60,8 @@ class AuthController extends Controller
         if (!$ldapUser) {
             $ldapUser = \LdapRecord\Models\ActiveDirectory\User::findBy('mail', $username);
         }
+
+//        dd("Получается вставляем эти данные и пытаемся авторизовать пользователя:", $ldapUser->getDn(), $password);
 
         if ($ldapUser && $connection->auth()->attempt($ldapUser->getDn(), $password)) {
             return $ldapUser;
